@@ -7,6 +7,9 @@ const CONVERSION_TABS: ConversionTab[] = [
   { id: 'png-to-jpg', label: 'PNG to JPG', fromFormat: 'png', toFormat: 'jpg', description: 'Convert PNG images to JPEG format' },
   { id: 'heic-to-jpg', label: 'HEIC to JPG', fromFormat: 'heic', toFormat: 'jpg', description: 'Convert HEIC images to JPEG format' },
   { id: 'webp-to-png', label: 'WebP to PNG', fromFormat: 'webp', toFormat: 'png', description: 'Convert WebP images to PNG format' },
+  { id: 'webp-to-jpg', label: 'WebP to JPG', fromFormat: 'webp', toFormat: 'jpg', description: 'Convert WebP images to JPEG format' },
+  { id: 'pdf-to-jpg', label: 'PDF to JPG', fromFormat: 'pdf', toFormat: 'jpg', description: 'Convert PDF pages to JPEG images' },
+  { id: 'jpg-to-pdf', label: 'JPG to PDF', fromFormat: 'jpg', toFormat: 'pdf', description: 'Convert JPEG images to PDF format' },
   { id: 'any-to-webp', label: 'Any to WebP', fromFormat: 'jpg', toFormat: 'webp', description: 'Convert any image to WebP format' },
 ];
 

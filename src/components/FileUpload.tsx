@@ -17,7 +17,8 @@ export const FileUpload = ({ onFilesAdded, targetFormat, isConverting }: FileUpl
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.bmp', '.gif']
+      'image/*': ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.bmp', '.gif'],
+      'application/pdf': ['.pdf']
     },
     multiple: true,
     disabled: isConverting
@@ -49,8 +50,8 @@ export const FileUpload = ({ onFilesAdded, targetFormat, isConverting }: FileUpl
         <div>
           <p className="text-lg font-medium text-gray-900">
             {isDragActive 
-              ? 'Drop your images here' 
-              : 'Drag & drop images here'
+              ? 'Drop your files here' 
+              : 'Drag & drop images or PDFs here'
             }
           </p>
           <p className="text-sm text-gray-500 mt-1">
