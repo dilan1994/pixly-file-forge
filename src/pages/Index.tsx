@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { Settings, Trash2, Play } from 'lucide-react';
+import { Settings, Trash2, Play, FileImage, Upload, Download } from 'lucide-react';
 import { ConversionTabs } from '@/components/ConversionTabs';
 import { FileUpload } from '@/components/FileUpload';
 import { FileQueue } from '@/components/FileQueue';
