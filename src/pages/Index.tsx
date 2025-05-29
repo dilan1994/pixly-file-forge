@@ -1,11 +1,255 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { Settings, Trash2, Play } from 'lucide-react';
+import { ConversionTabs } from '@/components/ConversionTabs';
+import { FileUpload } from '@/components/FileUpload';
+import { FileQueue } from '@/components/FileQueue';
+import { useImageConverter } from '@/hooks/useImageConverter';
+import { ConversionTab, ConversionSettings } from '@/types';
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState('jpg-to-png');
+  const [currentConversion, setCurrentConversion] = useState<ConversionTab>({
+    id: 'jpg-to-png',
+    label: 'JPG to PNG',
+    fromFormat: 'jpg',
+    toFormat: 'png',
+    description: 'Convert JPEG images to PNG format'
+  });
+  const [settings, setSettings] = useState<ConversionSettings>({
+    quality: 0.9,
+    format: 'png',
+    maintainAspectRatio: true
+  });
+  const [showSettings, setShowSettings] = useState(false);
+
+  const {
+    files,
+    isConverting,
+    addFiles,
+    convertFiles,
+    removeFile,
+    clearAll
+  } = useImageConverter();
+
+  const handleTabChange = (tab: ConversionTab) => {
+    setActiveTab(tab.id);
+    setCurrentConversion(tab);
+    setSettings(prev => ({ ...prev, format: tab.toFormat }));
+  };
+
+  const handleFilesAdded = (newFiles: File[]) => {
+    addFiles(newFiles, currentConversion.toFormat);
+  };
+
+  const handleConvert = () => {
+    convertFiles(settings);
+  };
+
+  const pendingFilesCount = files.filter(f => f.status === 'pending').length;
+  const completedFilesCount = files.filter(f => f.status === 'completed').length;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gray-50">
+      <Toaster position="top-right" />
+      
+      {/* Header */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Image Converter
+            </h1>
+            <p className="text-gray-600">
+              Convert images between different formats quickly and easily
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Conversion Tabs */}
+        <ConversionTabs 
+          activeTab={activeTab} 
+          onTabChange={handleTabChange} 
+        />
+
+        {/* Upload Area */}
+        <div className="mb-8">
+          <FileUpload
+            onFilesAdded={handleFilesAdded}
+            targetFormat={currentConversion.toFormat}
+            isConverting={isConverting}
+          />
+        </div>
+
+        {/* Controls */}
+        {files.length > 0 && (
+          <div className="mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={() => setShowSettings(!showSettings)}
+                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                  >
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
+                  </button>
+                  
+                  <div className="text-sm text-gray-600">
+                    {pendingFilesCount} pending • {completedFilesCount} completed
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={clearAll}
+                    disabled={isConverting}
+                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Clear All
+                  </button>
+                  
+                  <button
+                    onClick={handleConvert}
+                    disabled={pendingFilesCount === 0 || isConverting}
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isConverting ? (
+                      <>
+                        <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Converting...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-4 h-4 mr-2" />
+                        Convert Files
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Settings Panel */}
+              {showSettings && (
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Quality
+                      </label>
+                      <input
+                        type="range"
+                        min="0.1"
+                        max="1"
+                        step="0.1"
+                        value={settings.quality}
+                        onChange={(e) => setSettings(prev => ({ 
+                          ...prev, 
+                          quality: parseFloat(e.target.value) 
+                        }))}
+                        className="w-full"
+                      />
+                      <div className="text-xs text-gray-500 mt-1">
+                        {Math.round(settings.quality * 100)}%
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Output Format
+                      </label>
+                      <select
+                        value={settings.format}
+                        onChange={(e) => setSettings(prev => ({ ...prev, format: e.target.value }))}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      >
+                        <option value="jpg">JPEG</option>
+                        <option value="png">PNG</option>
+                        <option value="webp">WebP</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="aspectRatio"
+                        checked={settings.maintainAspectRatio}
+                        onChange={(e) => setSettings(prev => ({ 
+                          ...prev, 
+                          maintainAspectRatio: e.target.checked 
+                        }))}
+                        className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                      />
+                      <label htmlFor="aspectRatio" className="ml-2 text-sm text-gray-700">
+                        Maintain aspect ratio
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* File Queue */}
+        <FileQueue files={files} onRemoveFile={removeFile} />
+
+        {/* Features Section */}
+        {files.length === 0 && (
+          <div className="mt-12">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Powerful Image Conversion Features
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Convert your images between multiple formats with high quality and speed. 
+                All processing happens in your browser for maximum privacy.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white p-6 rounded-lg border border-gray-200">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <FileImage className="w-6 h-6 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Multiple Formats
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Support for JPG, PNG, WebP, HEIC, BMP, and GIF formats with high-quality conversion.
+                </p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg border border-gray-200">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                  <Upload className="w-6 h-6 text-green-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Batch Processing
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Convert multiple images at once with drag & drop support and progress tracking.
+                </p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg border border-gray-200">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                  <Download className="w-6 h-6 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Easy Download
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Download converted files individually or as a ZIP archive for bulk downloads.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
