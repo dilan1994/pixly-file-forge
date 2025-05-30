@@ -8,6 +8,7 @@ interface ConverterButtonProps {
   className?: string;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
   size?: "default" | "sm" | "lg" | "icon";
+  disabled?: boolean;
 }
 
 export const ConverterButton = ({ 
@@ -16,6 +17,7 @@ export const ConverterButton = ({
   className,
   variant = "ghost",
   size = "sm",
+  disabled = false,
   ...props 
 }: ConverterButtonProps) => {
   return (
@@ -23,6 +25,7 @@ export const ConverterButton = ({
       variant={variant}
       size={size}
       onClick={onClick}
+      disabled={disabled}
       className={cn(
         "text-foreground hover:text-primary transition-colors",
         className
