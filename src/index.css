@@ -144,4 +144,114 @@
   .text-accent {
     color: var(--color-accent);
   }
+
+  /* Container Query Support */
+  .container-type-inline-size {
+    container-type: inline-size;
+  }
+  
+  .container-name-main-content {
+    container-name: main-content;
+  }
+
+  /* Modern Square Tab Button Design */
+  .conversion-tabs {
+    container-type: inline-size;
+  }
+
+  .tab-button {
+    position: relative;
+    min-height: 44px; /* iOS touch target minimum */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tab-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+      var(--color-primary) 0%, 
+      var(--color-secondary) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+  }
+
+  .tab-button:hover::before {
+    opacity: 0.1;
+  }
+
+  /* Touch-friendly interactions */
+  @media (hover: none) and (pointer: coarse) {
+    .tab-button:active {
+      transform: scale(0.95);
+    }
+  }
+
+  /* Responsive Grid using Container Queries */
+  @container main-content (min-width: 375px) {
+    .conversion-tabs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @container main-content (min-width: 768px) {
+    .conversion-tabs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @container main-content (min-width: 1024px) {
+    .conversion-tabs {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @container main-content (min-width: 1440px) {
+    .conversion-tabs {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  /* Improved mobile scrolling */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+  }
+
+  /* Glass morphism effects */
+  .glass-card {
+    background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+}
+
+/* Scroll-driven Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-animate {
+  animation: fade-in-up linear;
+  animation-timeline: view();
+  animation-range: entry 0% entry 50%;
+}
+
+/* View Transitions API support */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.5s;
+  }
 }

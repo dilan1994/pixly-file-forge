@@ -25,4 +25,5 @@ export interface ConversionTab {
   fromFormat: SupportedFormat;
   toFormat: SupportedFormat;
   description: string;
+  icon?: string;
 }
