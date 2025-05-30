@@ -5,6 +5,7 @@ import { ConversionTabs } from '@/components/ConversionTabs';
 import { ConversionButtons } from '@/components/ConversionButtons';
 import { FileUpload } from '@/components/FileUpload';
 import { FileQueue } from '@/components/FileQueue';
+import { FeatureCards } from '@/components/FeatureCards';
 import { ConverterButton } from '@/components/ui/ConverterButton';
 import { useImageConverter } from '@/hooks/useImageConverter';
 import { ConversionTab, ConversionSettings } from '@/types';
@@ -284,85 +285,7 @@ const Index = () => {
             transition={{ delay: 0.6 }}
             className="mt-16"
           >
-            {/* Enhanced Feature Cards Section */}
-            <section className="features-section">
-              <h2 className="features-title">Powerful Image Conversion Features</h2>
-              <p className="features-subtitle">
-                Convert your images between multiple formats with high quality and speed. All processing 
-                happens in your browser for maximum privacy.
-              </p>
-              
-              <div className="features-grid">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="feature-card feature-card-multiple"
-                >
-                  <div className="feature-card-content">
-                    <div className="feature-icon">
-                      <FileImage className="w-8 h-8" />
-                    </div>
-                    <h3 className="feature-title">12 Format Support</h3>
-                    <p className="feature-description">
-                      Support for JPG, PNG, WebP, HEIC, BMP, TIFF, GIF, SVG, ICO, and PDF formats 
-                      with high-quality conversion and transparency preservation.
-                    </p>
-                    <div className="feature-action">
-                      <span>Learn more</span>
-                      <span>→</span>
-                    </div>
-                  </div>
-                </motion.div>
-                
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="feature-card feature-card-batch"
-                >
-                  <div className="feature-card-content">
-                    <div className="feature-icon">
-                      <Upload className="w-8 h-8" />
-                    </div>
-                    <h3 className="feature-title">Batch Processing</h3>
-                    <p className="feature-description">
-                      Convert multiple images at once with drag & drop support, progress tracking, 
-                      and queue management for efficient bulk processing.
-                    </p>
-                    <div className="feature-action">
-                      <span>Start batch conversion</span>
-                      <span>→</span>
-                    </div>
-                  </div>
-                </motion.div>
-                
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="feature-card feature-card-download"
-                >
-                  <div className="feature-card-content">
-                    <div className="feature-icon">
-                      <Download className="w-8 h-8" />
-                    </div>
-                    <h3 className="feature-title">Easy Download</h3>
-                    <p className="feature-description">
-                      Download converted files individually or as a ZIP archive for bulk downloads. 
-                      Auto-download option available for seamless workflow.
-                    </p>
-                    <div className="feature-action">
-                      <span>Download options</span>
-                      <span>→</span>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </section>
+            <FeatureCards />
           </motion.div>
         )}
       </div>

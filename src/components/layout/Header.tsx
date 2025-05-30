@@ -41,7 +41,9 @@ export const Header = () => {
     { code: 'FR', name: 'Français', flag: '🇫🇷' },
     { code: 'DE', name: 'Deutsch', flag: '🇩🇪' },
     { code: 'ZH', name: '中文', flag: '🇨🇳' },
-    { code: 'JA', name: '日本語', flag: '🇯🇵' }
+    { code: 'JA', name: '日本語', flag: '🇯🇵' },
+    { code: 'KO', name: '한국어', flag: '🇰🇷' },
+    { code: 'PT', name: 'Português', flag: '🇵🇹' }
   ];
 
   useEffect(() => {
@@ -60,6 +62,18 @@ export const Header = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setShowLanguageDropdown(false);
+    };
+
+    if (showLanguageDropdown) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [showLanguageDropdown]);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
@@ -87,6 +101,8 @@ export const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const ThemeIcon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor;
+
+  const selectedLanguage = languages.find(lang => lang.code === language) || languages[0];
 
   return (
     <motion.header
@@ -145,14 +161,14 @@ export const Header = () => {
           <div className="nav-settings-group">
             {/* Auto Download Control */}
             <div className="nav-setting-item">
-              <span className="nav-setting-label">Auto Download:</span>
+              <span className="nav-setting-label">Auto:</span>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setAutoDownload(!autoDownload)}
                 className={`nav-auto-download ${autoDownload ? 'active' : ''}`}
               >
                 <motion.div
-                  animate={{ x: autoDownload ? 18 : 0 }}
+                  animate={{ x: autoDownload ? 24 : 0 }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   className="nav-toggle-thumb"
                 />
@@ -173,27 +189,40 @@ export const Header = () => {
                   className={`nav-quality-slider bg-gradient-to-r ${getQualityColor(defaultQuality)}`}
                 />
                 <span className="nav-quality-value">
-                  {Math.round(defaultQuality * 100)}
+                  {Math.round(defaultQuality * 100)}%
                 </span>
               </div>
             </div>
 
-            {/* Language Selector */}
+            {/* Enhanced Language Selector */}
             <div className="nav-setting-item">
-              <span className="nav-setting-label">Language:</span>
-              <div className="relative">
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="nav-language-selector appearance-none"
-                >
+              <div 
+                className={`nav-language-selector ${showLanguageDropdown ? 'open' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLanguageDropdown(!showLanguageDropdown);
+                }}
+              >
+                <span className="language-flag">{selectedLanguage.flag}</span>
+                <span className="language-text">{selectedLanguage.code}</span>
+                <span className="dropdown-arrow">▼</span>
+                
+                <div className="language-dropdown">
                   {languages.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.flag} {lang.code}
-                    </option>
+                    <div
+                      key={lang.code}
+                      className={`language-option ${lang.code === language ? 'selected' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLanguage(lang.code);
+                        setShowLanguageDropdown(false);
+                      }}
+                    >
+                      <span className="language-flag">{lang.flag}</span>
+                      <span className="language-text">{lang.name}</span>
+                    </div>
                   ))}
-                </select>
-                <Globe className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 pointer-events-none text-muted-foreground" />
+                </div>
               </div>
             </div>
           </div>
