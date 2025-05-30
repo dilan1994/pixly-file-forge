@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Settings, Trash2, Play, FileImage, Upload, Download } from 'lucide-react';
@@ -7,6 +6,8 @@ import { FileUpload } from '@/components/FileUpload';
 import { FileQueue } from '@/components/FileQueue';
 import { useImageConverter } from '@/hooks/useImageConverter';
 import { ConversionTab, ConversionSettings } from '@/types';
+import { useAppStore } from '@/store/useAppStore';
+import { motion } from 'framer-motion';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('jpg-to-png');
@@ -17,12 +18,14 @@ const Index = () => {
     toFormat: 'png',
     description: 'Convert JPEG images to PNG format'
   });
+  const [showSettings, setShowSettings] = useState(false);
+  
+  const { defaultQuality, preferredFormat } = useAppStore();
   const [settings, setSettings] = useState<ConversionSettings>({
-    quality: 0.9,
+    quality: defaultQuality,
     format: 'png',
     maintainAspectRatio: true
   });
-  const [showSettings, setShowSettings] = useState(false);
 
   const {
     files,
@@ -51,42 +54,59 @@ const Index = () => {
   const completedFilesCount = files.filter(f => f.status === 'completed').length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <Toaster position="top-right" />
       
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Image Converter
-            </h1>
-            <p className="text-gray-600">
-              Convert images between different formats quickly and easily
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
+            Convert Images Instantly
+          </h1>
+          <p className="text-xl text-text/70 max-w-2xl mx-auto">
+            Transform your images between formats with high quality and lightning speed. 
+            All processing happens securely in your browser.
+          </p>
+        </motion.div>
+
         {/* Conversion Tabs */}
-        <ConversionTabs 
-          activeTab={activeTab} 
-          onTabChange={handleTabChange} 
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <ConversionTabs 
+            activeTab={activeTab} 
+            onTabChange={handleTabChange} 
+          />
+        </motion.div>
 
         {/* Upload Area */}
-        <div className="mb-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-8"
+        >
           <FileUpload
             onFilesAdded={handleFilesAdded}
             targetFormat={currentConversion.toFormat}
             isConverting={isConverting}
           />
-        </div>
+        </motion.div>
 
         {/* Controls */}
         {files.length > 0 && (
-          <div className="mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mb-6"
+          >
             <div className="bg-white rounded-lg border border-gray-200 p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-4">
@@ -192,15 +212,26 @@ const Index = () => {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* File Queue */}
-        <FileQueue files={files} onRemoveFile={removeFile} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <FileQueue files={files} onRemoveFile={removeFile} />
+        </motion.div>
 
         {/* Features Section */}
         {files.length === 0 && (
-          <div className="mt-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-16"
+          >
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 Powerful Image Conversion Features
@@ -248,7 +279,7 @@ const Index = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
