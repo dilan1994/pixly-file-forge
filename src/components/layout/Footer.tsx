@@ -16,8 +16,10 @@ import {
   Star
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const Footer = () => {
+  const { t, i18n } = useTranslation();
   const [showPreferences, setShowPreferences] = useState(false);
   const {
     clockFormat,
@@ -70,21 +72,34 @@ export const Footer = () => {
   ];
 
   const languages = [
-    { code: 'EN', name: 'English', flag: '🇺🇸' },
-    { code: 'ES', name: 'Español', flag: '🇪🇸' },
-    { code: 'FR', name: 'Français', flag: '🇫🇷' },
-    { code: 'DE', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'ZH', name: '中文', flag: '🇨🇳' },
-    { code: 'JA', name: '日本語', flag: '🇯🇵' }
+    { code: 'en', flag: '🇺🇸', name: 'English' },
+    { code: 'es', flag: '🇪🇸', name: 'Español' },
+    { code: 'fr', flag: '🇫🇷', name: 'Français' },
+    { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
+    { code: 'ja', flag: '🇯🇵', name: '日本語' },
+    { code: 'zh', flag: '🇨🇳', name: '中文' },
+    { code: 'ko', flag: '🇰🇷', name: '한국어' },
+    { code: 'pt', flag: '🇵🇹', name: 'Português' }
   ];
 
   const formats = ['PNG', 'JPG', 'WebP', 'HEIC'];
   const qualityPresets = [
-    { label: 'Low', value: 0.3 },
-    { label: 'Medium', value: 0.7 },
-    { label: 'High', value: 0.9 },
-    { label: 'Max', value: 1.0 }
+    { value: 0.3, label: t('settings.low') },
+    { value: 0.6, label: t('settings.medium') },
+    { value: 0.8, label: t('settings.high') },
+    { value: 1.0, label: t('settings.max') }
   ];
+
+  const themes = [
+    { value: 'light', label: t('theme.light'), icon: '☀️' },
+    { value: 'dark', label: t('theme.dark'), icon: '🌙' },
+    { value: 'cyber', label: t('theme.cyber'), icon: '⚡' }
+  ];
+
+  const handleLanguageChange = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+    localStorage.setItem('selectedLanguage', langCode);
+  };
 
   const FooterColumn = ({ title, links }: { title: string; links: typeof productLinks }) => (
     <div className="space-y-4">
@@ -160,8 +175,7 @@ export const Footer = () => {
               </span>
             </div>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Transform your images with professional-grade conversion tools. 
-              Fast, secure, and completely browser-based processing.
+              {t('features.subtitle')}
             </p>
           </div>
         </div>
@@ -174,11 +188,11 @@ export const Footer = () => {
             {/* Language Selector */}
             <div className="preference-item">
               <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                Language
+                {t('footer.language')}
               </label>
               <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
+                value={i18n.language}
+                onChange={(e) => handleLanguageChange(e.target.value)}
                 className="w-full px-2 py-1 text-xs bg-background border border-border rounded text-foreground"
               >
                 {languages.map((lang) => (
@@ -192,12 +206,12 @@ export const Footer = () => {
             {/* Quality Presets */}
             <div className="preference-item">
               <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                Quality Preset
+                {t('footer.quality_preset')}
               </label>
               <div className="flex gap-1">
                 {qualityPresets.map((preset) => (
                   <button
-                    key={preset.label}
+                    key={preset.value}
                     onClick={() => setDefaultQuality(preset.value)}
                     className={`px-2 py-1 text-xs rounded transition-colors ${
                       Math.abs(defaultQuality - preset.value) < 0.1
@@ -214,7 +228,7 @@ export const Footer = () => {
             {/* Auto-save Toggle */}
             <div className="preference-item">
               <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                Auto Download
+                {t('settings.auto_download')}
               </label>
               <button
                 onClick={() => setAutoDownload(!autoDownload)}
@@ -232,7 +246,7 @@ export const Footer = () => {
             {/* Default Format */}
             <div className="preference-item">
               <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                Default Format
+                {t('footer.default_format')}
               </label>
               <select
                 value={preferredFormat}
@@ -250,20 +264,20 @@ export const Footer = () => {
             {/* Theme Selector */}
             <div className="preference-item">
               <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                Theme
+                {t('footer.theme')}
               </label>
               <div className="flex gap-1">
-                {(['light', 'dark', 'cyber'] as const).map((themeOption) => (
+                {themes.map((themeOption) => (
                   <button
-                    key={themeOption}
-                    onClick={() => setTheme(themeOption)}
+                    key={themeOption.value}
+                    onClick={() => setTheme(themeOption.value as any)}
                     className={`px-2 py-1 text-xs rounded transition-colors capitalize ${
-                      theme === themeOption
+                      theme === themeOption.value
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-accent text-accent-foreground hover:bg-accent/80'
                     }`}
                   >
-                    {themeOption}
+                    {themeOption.icon}
                   </button>
                 ))}
               </div>
@@ -279,12 +293,12 @@ export const Footer = () => {
             <div className="flex items-center gap-1 mb-2 md:mb-0">
               <span>© 2024 Pixly Forge. Made with</span>
               <Heart className="w-3 h-3 text-red-500 fill-current" />
-              <span>for creators worldwide.</span>
+              <span>{t('footer.made_with_for')} creators worldwide.</span>
             </div>
             <div className="flex items-center gap-4">
-              <span>All processing happens in your browser</span>
+              <span>{t('footer.all_processing_happens')} in your browser</span>
               <Shield className="w-3 h-3 text-green-500" />
-              <span>Privacy-first design</span>
+              <span>{t('footer.privacy_first_design')}</span>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Settings, Trash2, Play, FileImage, Upload, Download } from 'lucide-react';
 import { ConversionTabs } from '@/components/ConversionTabs';
 import { ConversionButtons } from '@/components/ConversionButtons';
@@ -13,6 +14,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { motion } from 'framer-motion';
 
 const Index = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('jpg-to-png');
   const [currentConversion, setCurrentConversion] = useState<ConversionTab>({
     id: 'jpg-to-png',
@@ -87,7 +89,7 @@ const Index = () => {
       
       {/* ENHANCED VERSION BANNER */}
       <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white text-center py-2 px-4 font-bold">
-        🚀 ENHANCED VERSION LOADED - Modern UI with 12 Conversion Options & Advanced Features 🚀
+        {t('main.enhanced')}
       </div>
       
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -98,14 +100,13 @@ const Index = () => {
           className="text-center mb-12"
         >
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
-            Convert Images Instantly ✨
+            {t('main.title')}
           </h1>
           <p className="text-xl text-text/70 max-w-2xl mx-auto">
-            Transform your images between formats with high quality and lightning speed. 
-            All processing happens securely in your browser.
+            {t('main.subtitle')}
           </p>
           <div className="mt-4 text-sm text-green-600 font-semibold">
-            🚀 Enhanced Version - Updated with Modern UI & Features
+            {t('main.enhanced')}
           </div>
         </motion.div>
 
@@ -166,11 +167,11 @@ const Index = () => {
                     className="inline-flex items-center space-x-2"
                   >
                     <Settings className="w-4 h-4" />
-                    <span>Settings</span>
+                    <span>{t('controls.settings')}</span>
                   </ConverterButton>
                   
                   <div className="text-sm text-gray-600">
-                    {pendingFilesCount} pending • {completedFilesCount} completed
+                    {pendingFilesCount} {t('controls.pending')} • {completedFilesCount} {t('controls.completed')}
                   </div>
                 </div>
 
@@ -182,7 +183,7 @@ const Index = () => {
                     className="inline-flex items-center space-x-2 disabled:opacity-50"
                   >
                     <Trash2 className="w-4 h-4" />
-                    <span>Clear All</span>
+                    <span>{t('controls.clear_all')}</span>
                   </ConverterButton>
                   
                   <ConverterButton
@@ -194,12 +195,12 @@ const Index = () => {
                     {isConverting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Converting...</span>
+                        <span>{t('controls.converting')}</span>
                       </>
                     ) : (
                       <>
                         <Play className="w-4 h-4" />
-                        <span>Convert Files</span>
+                        <span>{t('controls.convert_files')}</span>
                       </>
                     )}
                   </ConverterButton>
@@ -212,7 +213,7 @@ const Index = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Quality
+                        {t('settings.quality')}
                       </label>
                       <input
                         type="range"
@@ -233,7 +234,7 @@ const Index = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Output Format
+                        {t('settings.output_format')}
                       </label>
                       <select
                         value={settings.format}
@@ -258,7 +259,7 @@ const Index = () => {
                         className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                       />
                       <label htmlFor="aspectRatio" className="ml-2 text-sm text-gray-700">
-                        Maintain aspect ratio
+                        {t('settings.maintain_aspect_ratio')}
                       </label>
                     </div>
                   </div>

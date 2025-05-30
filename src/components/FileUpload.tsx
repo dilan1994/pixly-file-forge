@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, FileImage, AlertCircle, CheckCircle, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -11,6 +12,7 @@ interface FileUploadProps {
 }
 
 export const FileUpload = ({ onFilesAdded, targetFormat, isConverting }: FileUploadProps) => {
+  const { t } = useTranslation();
   const [dragActive, setDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
@@ -113,7 +115,7 @@ export const FileUpload = ({ onFilesAdded, targetFormat, isConverting }: FileUpl
                   <Upload className="w-8 h-8 text-primary animate-bounce" />
                 </div>
                 <div className="space-y-2">
-                  <p className="text-lg font-semibold">Uploading files...</p>
+                  <p className="text-lg font-semibold">{t('uploadingFiles')}</p>
                   <div className="w-full max-w-xs mx-auto bg-accent rounded-full h-2">
                     <motion.div
                       className="bg-primary h-2 rounded-full"
@@ -171,11 +173,11 @@ export const FileUpload = ({ onFilesAdded, targetFormat, isConverting }: FileUpl
                       ? isDragReject
                         ? 'Some files are not supported'
                         : 'Drop your files here'
-                      : 'Drag & drop your images here'
+                      : t('upload.title')
                     }
                   </h3>
                   <p className="text-muted-foreground">
-                    or{' '}
+                    {t('upload.browse')}{' '}
                     <span className="text-primary font-medium hover:underline">
                       click to browse
                     </span>
@@ -185,7 +187,7 @@ export const FileUpload = ({ onFilesAdded, targetFormat, isConverting }: FileUpl
                 {/* Supported Formats */}
                 <div className="space-y-3">
                   <p className="text-sm text-muted-foreground">
-                    Converting to: <span className="font-semibold text-primary">{targetFormat.toUpperCase()}</span>
+                    {t('upload.converting_to')}: <span className="font-semibold text-primary">{targetFormat.toUpperCase()}</span>
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {['JPG', 'PNG', 'WebP', 'HEIC', 'BMP', 'GIF', 'TIFF', 'SVG', 'ICO', 'PDF'].map((format) => (
@@ -201,7 +203,7 @@ export const FileUpload = ({ onFilesAdded, targetFormat, isConverting }: FileUpl
 
                 {/* File Limits */}
                 <div className="text-xs text-muted-foreground space-y-1">
-                  <p>• Maximum file size: 10MB per file</p>
+                  <p>• {t('upload.max_size')}</p>
                   <p>• Multiple files supported</p>
                   <p>• All processing happens in your browser</p>
                 </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { 
   Home, 
   BookOpen, 
@@ -18,33 +19,41 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 
+interface Language {
+  code: string;
+  name: string;
+  flag: string;
+  nativeName: string;
+}
+
+const languages: Language[] = [
+  { code: 'en', name: 'English', flag: '🇺🇸', nativeName: 'English' },
+  { code: 'es', name: 'Spanish', flag: '🇪🇸', nativeName: 'Español' },
+  { code: 'fr', name: 'French', flag: '🇫🇷', nativeName: 'Français' },
+  { code: 'de', name: 'German', flag: '🇩🇪', nativeName: 'Deutsch' },
+  { code: 'ja', name: 'Japanese', flag: '🇯🇵', nativeName: '日本語' },
+  { code: 'zh', name: 'Chinese', flag: '🇨🇳', nativeName: '中文' },
+  { code: 'ko', name: 'Korean', flag: '🇰🇷', nativeName: '한국어' },
+  { code: 'pt', name: 'Portuguese', flag: '🇵🇹', nativeName: 'Português' }
+];
+
 export const Header = () => {
   const location = useLocation();
+  const { t, i18n } = useTranslation();
   const { 
     theme, 
     setTheme, 
     autoDownload, 
     setAutoDownload, 
     defaultQuality, 
-    setDefaultQuality,
-    language,
-    setLanguage
+    setDefaultQuality
   } = useAppStore();
   
   const [currentTime, setCurrentTime] = useState(new Date());
   const [userLocation, setUserLocation] = useState('Global');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
 
-  const languages = [
-    { code: 'EN', name: 'English', flag: '🇺🇸' },
-    { code: 'ES', name: 'Español', flag: '🇪🇸' },
-    { code: 'FR', name: 'Français', flag: '🇫🇷' },
-    { code: 'DE', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'ZH', name: '中文', flag: '🇨🇳' },
-    { code: 'JA', name: '日本語', flag: '🇯🇵' },
-    { code: 'KO', name: '한국어', flag: '🇰🇷' },
-    { code: 'PT', name: 'Português', flag: '🇵🇹' }
-  ];
+  const selectedLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -75,6 +84,16 @@ export const Header = () => {
     }
   }, [showLanguageDropdown]);
 
+  const handleLanguageChange = (language: Language) => {
+    i18n.changeLanguage(language.code);
+    setShowLanguageDropdown(false);
+    
+    // Save to localStorage
+    localStorage.setItem('selectedLanguage', language.code);
+    
+    console.log(`Language changed to: ${language.name}`);
+  };
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
       hour12: true,
@@ -101,8 +120,6 @@ export const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const ThemeIcon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor;
-
-  const selectedLanguage = languages.find(lang => lang.code === language) || languages[0];
 
   return (
     <motion.header
@@ -135,7 +152,7 @@ export const Header = () => {
             className={`nav-button ${isActive('/') ? 'active' : ''}`}
           >
             <Home className="w-4 h-4" />
-            <span className="hidden sm:inline">Converter</span>
+            <span className="hidden sm:inline">{t('nav.converter')}</span>
           </Link>
           
           <Link
@@ -143,7 +160,7 @@ export const Header = () => {
             className={`nav-button ${isActive('/guide') ? 'active' : ''}`}
           >
             <BookOpen className="w-4 h-4" />
-            <span className="hidden sm:inline">Guide</span>
+            <span className="hidden sm:inline">{t('nav.guide')}</span>
           </Link>
           
           <Link
@@ -151,7 +168,7 @@ export const Header = () => {
             className={`nav-button ${isActive('/faq') ? 'active' : ''}`}
           >
             <HelpCircle className="w-4 h-4" />
-            <span className="hidden sm:inline">FAQ</span>
+            <span className="hidden sm:inline">{t('nav.faq')}</span>
           </Link>
         </div>
 
@@ -161,7 +178,7 @@ export const Header = () => {
           <div className="nav-settings-group">
             {/* Auto Download Control */}
             <div className="nav-setting-item">
-              <span className="nav-setting-label">Auto:</span>
+              <span className="nav-setting-label">{t('nav.auto')}</span>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setAutoDownload(!autoDownload)}
@@ -177,7 +194,7 @@ export const Header = () => {
 
             {/* Quality Control */}
             <div className="nav-setting-item">
-              <span className="nav-setting-label">Quality:</span>
+              <span className="nav-setting-label">{t('nav.quality')}</span>
               <div className="nav-quality-control">
                 <input
                   type="range"
@@ -204,22 +221,21 @@ export const Header = () => {
                 }}
               >
                 <span className="language-flag">{selectedLanguage.flag}</span>
-                <span className="language-text">{selectedLanguage.code}</span>
+                <span className="language-text">{selectedLanguage.code.toUpperCase()}</span>
                 <span className="dropdown-arrow">▼</span>
                 
                 <div className="language-dropdown">
-                  {languages.map((lang) => (
+                  {languages.map((language) => (
                     <div
-                      key={lang.code}
-                      className={`language-option ${lang.code === language ? 'selected' : ''}`}
+                      key={language.code}
+                      className={`language-option ${language.code === i18n.language ? 'selected' : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setLanguage(lang.code);
-                        setShowLanguageDropdown(false);
+                        handleLanguageChange(language);
                       }}
                     >
-                      <span className="language-flag">{lang.flag}</span>
-                      <span className="language-text">{lang.name}</span>
+                      <span className="language-flag">{language.flag}</span>
+                      <span className="language-text">{language.nativeName}</span>
                     </div>
                   ))}
                 </div>
@@ -256,7 +272,7 @@ export const Header = () => {
                 <Zap className="w-4 h-4" />
               )}
               <span className="hidden lg:inline">
-                {theme === 'light' ? 'Light' : theme === 'dark' ? 'Dark' : 'Cyber'}
+                {t(`theme.${theme}`)}
               </span>
             </motion.button>
           </div>

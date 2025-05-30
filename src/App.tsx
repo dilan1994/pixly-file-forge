@@ -1,26 +1,28 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import Index from "./pages/Index";
-import { GuidePage } from "./pages/GuidePage";
-import { FAQPage } from "./pages/FAQPage";
-import NotFound from "./pages/NotFound";
+import { Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import './i18n'; // Import i18n configuration
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
+import Index from '@/pages/Index';
+import { GuidePage } from '@/pages/GuidePage';
+import { FAQPage } from '@/pages/FAQPage';
+import NotFound from '@/pages/NotFound';
 
-const queryClient = new QueryClient();
+// Loading component for i18n
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+  </div>
+);
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+function App() {
+  return (
     <ThemeProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <div className="min-h-screen flex flex-col w-full">
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router>
+          <div className="min-h-screen bg-background text-foreground">
             <Header />
             <main className="flex-1">
               <Routes>
@@ -31,11 +33,22 @@ const App = () => (
               </Routes>
             </main>
             <Footer />
+            <Toaster 
+              position="top-right"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: 'rgb(var(--background))',
+                  color: 'rgb(var(--foreground))',
+                  border: '1px solid rgb(var(--border))',
+                },
+              }}
+            />
           </div>
-        </BrowserRouter>
-      </TooltipProvider>
+        </Router>
+      </Suspense>
     </ThemeProvider>
-  </QueryClientProvider>
-);
+  );
+}
 
 export default App;

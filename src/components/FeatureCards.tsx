@@ -1,32 +1,35 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { FileImage, Upload, Download, Zap, Shield, Star } from 'lucide-react';
 
 export const FeatureCards = () => {
+  const { t } = useTranslation();
+  
   const features = [
     {
       id: 'formats',
       icon: FileImage,
-      title: '12 Format Support',
-      description: 'Support for JPG, PNG, WebP, HEIC, BMP, TIFF, GIF, SVG, ICO, and PDF formats with high-quality conversion and transparency preservation.',
-      action: 'Learn more',
+      titleKey: 'features.multiple.title',
+      descriptionKey: 'features.multiple.description',
+      actionKey: 'features.multiple.action',
       variant: 'multiple',
       gradient: 'from-blue-500 to-purple-600'
     },
     {
       id: 'batch',
       icon: Upload,
-      title: 'Batch Processing',
-      description: 'Convert multiple images at once with drag & drop support, progress tracking, and queue management for efficient bulk processing.',
-      action: 'Start batch conversion',
+      titleKey: 'features.batch.title',
+      descriptionKey: 'features.batch.description',
+      actionKey: 'features.batch.action',
       variant: 'batch',
       gradient: 'from-green-500 to-teal-600'
     },
     {
       id: 'download',
       icon: Download,
-      title: 'Easy Download',
-      description: 'Download converted files individually or as a ZIP archive for bulk downloads. Auto-download option available for seamless workflow.',
-      action: 'Download options',
+      titleKey: 'features.download.title',
+      descriptionKey: 'features.download.description',
+      actionKey: 'features.download.action',
       variant: 'download',
       gradient: 'from-purple-500 to-pink-600'
     }
@@ -45,7 +48,7 @@ export const FeatureCards = () => {
         transition={{ delay: 0.7, duration: 0.6 }}
         className="features-title"
       >
-        Powerful Image Conversion Features
+        {t('features.title')}
       </motion.h2>
       
       <motion.p 
@@ -54,8 +57,7 @@ export const FeatureCards = () => {
         transition={{ delay: 0.8, duration: 0.6 }}
         className="features-subtitle"
       >
-        Convert your images between multiple formats with high quality and speed. All processing 
-        happens in your browser for maximum privacy.
+        {t('features.subtitle')}
       </motion.p>
       
       <div className="features-grid">
@@ -93,10 +95,10 @@ export const FeatureCards = () => {
                   <IconComponent className="w-8 h-8" />
                 </motion.div>
                 
-                <h3 className="feature-title">{feature.title}</h3>
+                <h3 className="feature-title">{t(feature.titleKey)}</h3>
                 
                 <p className="feature-description">
-                  {feature.description}
+                  {t(feature.descriptionKey)}
                 </p>
                 
                 <motion.div 
@@ -106,7 +108,7 @@ export const FeatureCards = () => {
                     transition: { duration: 0.2 }
                   }}
                 >
-                  <span>{feature.action}</span>
+                  <span>{t(feature.actionKey)}</span>
                   <motion.span
                     animate={{ x: [0, 4, 0] }}
                     transition={{ 
@@ -146,24 +148,24 @@ export const FeatureCards = () => {
         <div className="flex items-center gap-3 p-4 rounded-lg bg-accent/20 border border-border/50">
           <Shield className="w-6 h-6 text-green-500" />
           <div>
-            <h4 className="font-semibold text-sm">Privacy First</h4>
-            <p className="text-xs text-muted-foreground">All processing in browser</p>
+            <h4 className="font-semibold text-sm">{t('features.privacy.title')}</h4>
+            <p className="text-xs text-muted-foreground">{t('features.privacy.description')}</p>
           </div>
         </div>
         
         <div className="flex items-center gap-3 p-4 rounded-lg bg-accent/20 border border-border/50">
           <Zap className="w-6 h-6 text-yellow-500" />
           <div>
-            <h4 className="font-semibold text-sm">Lightning Fast</h4>
-            <p className="text-xs text-muted-foreground">Instant conversions</p>
+            <h4 className="font-semibold text-sm">{t('features.fast.title')}</h4>
+            <p className="text-xs text-muted-foreground">{t('features.fast.description')}</p>
           </div>
         </div>
         
         <div className="flex items-center gap-3 p-4 rounded-lg bg-accent/20 border border-border/50">
           <Star className="w-6 h-6 text-purple-500" />
           <div>
-            <h4 className="font-semibold text-sm">High Quality</h4>
-            <p className="text-xs text-muted-foreground">Lossless conversion</p>
+            <h4 className="font-semibold text-sm">{t('features.quality.title')}</h4>
+            <p className="text-xs text-muted-foreground">{t('features.quality.description')}</p>
           </div>
         </div>
       </motion.div>
