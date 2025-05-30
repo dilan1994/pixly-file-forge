@@ -1,9 +1,11 @@
+
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Settings, Trash2, Play, FileImage, Upload, Download } from 'lucide-react';
 import { ConversionTabs } from '@/components/ConversionTabs';
 import { FileUpload } from '@/components/FileUpload';
 import { FileQueue } from '@/components/FileQueue';
+import { ConverterButton } from '@/components/ui/ConverterButton';
 import { useImageConverter } from '@/hooks/useImageConverter';
 import { ConversionTab, ConversionSettings } from '@/types';
 import { useAppStore } from '@/store/useAppStore';
@@ -110,13 +112,14 @@ const Index = () => {
             <div className="bg-white rounded-lg border border-gray-200 p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-4">
-                  <button
+                  <ConverterButton
                     onClick={() => setShowSettings(!showSettings)}
-                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                    variant="outline"
+                    className="inline-flex items-center space-x-2"
                   >
-                    <Settings className="w-4 h-4 mr-2" />
-                    Settings
-                  </button>
+                    <Settings className="w-4 h-4" />
+                    <span>Settings</span>
+                  </ConverterButton>
                   
                   <div className="text-sm text-gray-600">
                     {pendingFilesCount} pending • {completedFilesCount} completed
@@ -124,32 +127,34 @@ const Index = () => {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <button
+                  <ConverterButton
                     onClick={clearAll}
                     disabled={isConverting}
-                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50"
+                    variant="outline"
+                    className="inline-flex items-center space-x-2 disabled:opacity-50"
                   >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Clear All
-                  </button>
+                    <Trash2 className="w-4 h-4" />
+                    <span>Clear All</span>
+                  </ConverterButton>
                   
-                  <button
+                  <ConverterButton
                     onClick={handleConvert}
                     disabled={pendingFilesCount === 0 || isConverting}
-                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    variant="default"
+                    className="inline-flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     {isConverting ? (
                       <>
-                        <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Converting...
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Converting...</span>
                       </>
                     ) : (
                       <>
-                        <Play className="w-4 h-4 mr-2" />
-                        Convert Files
+                        <Play className="w-4 h-4" />
+                        <span>Convert Files</span>
                       </>
                     )}
-                  </button>
+                  </ConverterButton>
                 </div>
               </div>
 
