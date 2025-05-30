@@ -1,67 +1,92 @@
-# 🚀 Pixly Forge - Modern Image Converter
+# 🛠️ Pixly Forge - Professional Tools Suite
 
-A professional-grade, browser-based image conversion tool built with React 18, Vite, and TypeScript. Transform your images between multiple formats with high quality, lightning speed, and complete privacy.
-
-![Pixly Forge Banner](https://via.placeholder.com/1200x400/3b82f6/ffffff?text=Pixly+Forge+-+Modern+Image+Converter)
+A comprehensive, privacy-focused image converter and tools suite built with React, TypeScript, and modern web technologies. All processing happens client-side for maximum privacy and security.
 
 ## ✨ Features
 
-### 🎯 **12 Format Support**
-- **JPG ↔ PNG** - JPEG to PNG with transparency support
-- **PNG ↔ JPG** - PNG to JPEG with compression
-- **HEIC → JPG** - Convert iPhone HEIC photos to JPG
-- **WebP ↔ PNG/JPG** - Modern WebP format conversion
-- **PDF → JPG** - Extract images from PDF documents
-- **BMP → PNG** - Convert bitmap images to PNG
-- **TIFF → JPG** - Convert high-quality TIFF to JPG
-- **GIF → PNG** - Convert animated GIF to static PNG
-- **SVG → PNG** - Convert vector SVG to raster PNG
-- **ICO → PNG** - Convert icon files to PNG format
-- **Any → WebP** - Convert any image to modern WebP
-- **And more!** - Comprehensive format support
+### 🔄 **File Converters (6 Tools)**
+- **Image Converter** - Convert between JPG, PNG, WebP, HEIC, BMP, GIF formats
+- **PDF Converter** - Convert PDF to images and images to PDF
+- **Archive Tool** - Create ZIP files and extract archives
+- **Vector Converter** - Convert SVG to PNG, JPG and other raster formats
+- **Unit Converter** - Convert between measurement units (Length, Weight, Temperature)
+- **Currency Converter** - Convert between world currencies with live rates
 
-### ⚡ **Advanced Processing**
-- **Batch Processing** - Convert multiple files simultaneously
-- **Drag & Drop Interface** - Intuitive file upload with visual feedback
-- **Real-time Preview** - Instant thumbnails of uploaded images
-- **Progress Tracking** - Monitor conversion progress for each file
-- **Quality Control** - Adjustable compression settings
-- **Auto Download** - Seamless workflow with automatic downloads
-- **ZIP Downloads** - Bulk download as organized ZIP archives
+### 🗜️ **File Compressors (3 Tools)**
+- **Image Compressor** - Reduce image file sizes without quality loss
+- **GIF Optimizer** - Optimize GIF animations for web
+- **PDF Compressor** - Reduce PDF file sizes
 
-### 🎨 **Modern UI/UX**
-- **Three Themes** - Light, Dark, and Cyberpunk modes
-- **Responsive Design** - Perfect on desktop, tablet, and mobile
-- **Glassmorphism Effects** - Modern semi-transparent design
-- **Smooth Animations** - Framer Motion powered interactions
-- **Touch Optimized** - Mobile-first responsive design
-- **Accessibility** - ARIA compliant with keyboard navigation
+### 🛠️ **Utility Tools (8 Tools)**
+- **OCR Text Extractor** - Extract text from images and PDFs (100+ languages)
+- **QR Code Generator** - Create QR codes for text, URLs, WiFi, contacts
+- **Barcode Generator** - Generate various barcode formats
+- **GIF Maker** - Create animated GIFs from images
+- **Color Picker** - Pick colors from images and generate palettes
+- **Hash Generator** - Generate MD5, SHA1, SHA256 hashes
+- **Password Generator** - Generate secure passwords
+- **Base64 Converter** - Encode and decode Base64 strings
 
-### 🔧 **Enhanced Navigation**
-- **Integrated Settings** - Auto Download, Quality, Language controls in header
-- **Real-time Clock** - Display current time with timezone detection
-- **Language Support** - Multi-language interface (EN, ES, FR, DE, ZH, JA)
-- **Theme Cycling** - Quick theme switching
-- **Comprehensive Footer** - Multiple sections with preferences bar
+### 🎨 **Creative Tools (4 Tools)**
+- **Meme Generator** - Create memes with custom text
+- **Watermark Tool** - Add watermarks to images
+- **Image Editor** - Basic image editing tools
+- **Collage Maker** - Create photo collages
 
-### 🛡️ **Privacy & Security**
-- **Browser-based Processing** - All conversion happens locally
-- **No Server Upload** - Files never leave your device
-- **Privacy-first Design** - No tracking or data collection
-- **GDPR Compliant** - Respects user privacy rights
+## 🚀 **Key Highlights**
 
-## 🚀 Quick Start
+- **22+ Professional Tools** - Complete suite for daily tasks
+- **Client-Side Processing** - No file uploads, maximum privacy
+- **Multi-Language Support** - 8 languages with native names
+- **Theme Support** - Light, Dark, and Cyber themes
+- **Responsive Design** - Works on desktop, tablet, and mobile
+- **Free & Open Source** - No registration or payment required
+- **Modern UI/UX** - Beautiful animations and interactions
 
-### Prerequisites
+## 🏗️ **Technology Stack**
+
+### **Core Framework**
+- **React 18+** - Modern functional components with hooks
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+
+### **UI & Animations**
+- **Framer Motion** - Smooth animations and transitions
+- **Lucide React** - Beautiful icon library
+- **React Hot Toast** - Elegant notifications
+
+### **Internationalization**
+- **react-i18next** - React integration for i18n
+- **i18next** - Core internationalization framework
+- **i18next-browser-languagedetector** - Automatic language detection
+
+### **File Processing Libraries**
+```json
+{
+  "Image Processing": ["fabric", "konva", "react-konva"],
+  "PDF Processing": ["pdf-lib", "jspdf", "pdf2pic"],
+  "Archive Processing": ["jszip", "file-saver"],
+  "OCR & Text": ["tesseract.js"],
+  "QR & Barcodes": ["qrcode", "jsbarcode"],
+  "GIF Processing": ["gif.js", "gifuct-js"],
+  "Color Tools": ["color", "colorthief", "chroma-js"],
+  "Crypto & Security": ["crypto-js", "bcryptjs"],
+  "Utilities": ["date-fns", "lodash", "uuid", "mime-types"]
+}
+```
+
+## 📦 **Installation & Setup**
+
+### **Prerequisites**
 - Node.js 18+ 
-- npm or yarn
+- npm or yarn package manager
 
-### Installation
-
+### **Quick Start**
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/pixly-forge.git
-cd pixly-forge
+git clone https://github.com/dilan1994/pixly-file-forge.git
+cd pixly-file-forge
 
 # Install dependencies
 npm install
@@ -73,257 +98,238 @@ npm run dev
 npm run build
 ```
 
-### Development Server
+### **Environment Setup**
 ```bash
-npm run dev
-```
-Open [http://localhost:8080](http://localhost:8080) to view the application.
+# Development
+npm run dev          # Start dev server on http://localhost:8080
 
-## 🏗️ Tech Stack
-
-### Core Technologies
-- **React 18+** - Modern React with functional components and hooks
-- **Vite 5.x** - Lightning-fast build tool and dev server
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first CSS framework
-
-### Key Libraries
-- **react-dropzone** - Drag & drop file upload functionality
-- **jszip** - ZIP file creation for bulk downloads
-- **file-saver** - Browser file download triggers
-- **react-hot-toast** - Beautiful notifications
-- **lucide-react** - Modern, clean icons
-- **framer-motion** - Smooth animations and transitions
-- **zustand** - Lightweight state management
-- **react-router-dom** - Client-side routing
-
-### Development Tools
-- **ESLint** - Code linting and quality
-- **Prettier** - Code formatting
-- **TypeScript** - Static type checking
-- **Vite** - Fast development and optimized builds
-
-## 📁 Project Structure
-
-```
-src/
-├── components/
-│   ├── layout/
-│   │   ├── Header.tsx          # Enhanced navigation with settings
-│   │   ├── Footer.tsx          # Comprehensive footer with preferences
-│   │   └── ThemeProvider.tsx   # Theme management
-│   ├── ui/
-│   │   ├── ConverterButton.tsx # Reusable button component
-│   │   └── ...                 # Other UI components
-│   ├── ConversionButtons.tsx   # 12 conversion option buttons
-│   ├── ConversionTabs.tsx      # Tab-based conversion interface
-│   ├── FileUpload.tsx          # Enhanced drag & drop upload
-│   ├── FileQueue.tsx           # File management and progress
-│   └── ...
-├── hooks/
-│   ├── useImageConverter.ts    # Image conversion logic
-│   └── useFileUpload.ts        # File upload handling
-├── pages/
-│   ├── Index.tsx               # Main converter interface
-│   ├── GuidePage.tsx           # Interactive user guide
-│   ├── FAQPage.tsx             # Comprehensive FAQ
-│   └── NotFound.tsx            # 404 error page
-├── store/
-│   └── useAppStore.ts          # Global state management
-├── types/
-│   └── index.ts                # TypeScript type definitions
-├── utils/
-│   ├── imageConverter.ts       # Core conversion utilities
-│   ├── fileValidation.ts       # File validation logic
-│   └── downloadHelper.ts       # Download management
-└── index.css                   # Global styles and themes
+# Production
+npm run build        # Build optimized production bundle
+npm run preview      # Preview production build
 ```
 
-## 🎨 Theme System
+## 🎯 **Tools Implementation Guide**
 
-### Available Themes
-1. **Light Theme** - Clean, professional light interface
-2. **Dark Theme** - Modern dark mode with high contrast
-3. **Cyberpunk Theme** - Futuristic neon-accented design
-
-### Theme Features
-- **CSS Custom Properties** - Dynamic theme switching
-- **Persistent Storage** - Remember user preferences
-- **System Detection** - Auto-detect system theme preference
-- **Smooth Transitions** - Animated theme changes
-
-## 🌐 Internationalization
-
-### Supported Languages
-- 🇺🇸 **English** (EN)
-- 🇪🇸 **Español** (ES)
-- 🇫🇷 **Français** (FR)
-- 🇩🇪 **Deutsch** (DE)
-- 🇨🇳 **中文** (ZH)
-- 🇯🇵 **日本語** (JA)
-
-### Language Features
-- **Dynamic Language Switching** - Change language without reload
-- **Persistent Preferences** - Remember language choice
-- **Flag Icons** - Visual language indicators
-- **RTL Support** - Ready for right-to-left languages
-
-## 📱 Responsive Design
-
-### Breakpoints
-- **Mobile** - 320px to 768px
-- **Tablet** - 768px to 1024px
-- **Desktop** - 1024px to 1440px
-- **Large Desktop** - 1440px+
-
-### Mobile Features
-- **Touch Optimized** - 44px minimum touch targets
-- **Swipe Gestures** - Natural mobile interactions
-- **Adaptive Layout** - Grid adjusts to screen size
-- **Performance Optimized** - Lazy loading and code splitting
-
-## 🔧 Configuration
-
-### Environment Variables
-```env
-VITE_APP_NAME=Pixly Forge
-VITE_APP_VERSION=2.1.0
-VITE_API_URL=https://api.pixlyforge.com
+### **1. Tools Dropdown Component**
+```tsx
+// src/components/ToolsDropdown.tsx
+- Professional dropdown with categories
+- Animated hover effects
+- Responsive design for all screen sizes
+- 22+ tools organized in 4 categories
 ```
 
-### Build Configuration
+### **2. Sample Tool Implementation (QR Generator)**
+```tsx
+// src/pages/tools/QRGenerator.tsx
+- Complete QR code generation tool
+- Multiple input types (Text, WiFi, Contact)
+- Customization options (size, colors, margin)
+- Download, copy, and share functionality
+```
+
+### **3. Tool Categories Structure**
 ```typescript
-// vite.config.ts
-export default defineConfig({
-  plugins: [react()],
-  build: {
-    target: 'esnext',
-    cssCodeSplit: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          ui: ['framer-motion', 'lucide-react']
-        }
-      }
-    }
+interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  category: 'converter' | 'compressor' | 'utility' | 'creative';
+  route: string;
+  features: string[];
+}
+```
+
+## 🌐 **Internationalization**
+
+### **Supported Languages**
+- 🇺🇸 **English** (en) - Default
+- 🇪🇸 **Español** (es) - Spanish
+- 🇫🇷 **Français** (fr) - French
+- 🇩🇪 **Deutsch** (de) - German
+- 🇯🇵 **日本語** (ja) - Japanese
+- 🇨🇳 **中文** (zh) - Chinese
+- 🇰🇷 **한국어** (ko) - Korean
+- 🇵🇹 **Português** (pt) - Portuguese
+
+### **Translation Keys**
+```typescript
+// Navigation, tools, features, controls, settings
+// 100+ comprehensive translation keys
+// Automatic browser language detection
+// Persistent language preferences
+```
+
+## 🎨 **Theme System**
+
+### **Available Themes**
+- **Light Theme** - Clean, professional appearance
+- **Dark Theme** - Easy on the eyes for low-light environments
+- **Cyber Theme** - Futuristic neon green accents
+
+### **Theme Implementation**
+```css
+/* CSS Variables for theme switching */
+:root { /* Light theme variables */ }
+[data-theme="dark"] { /* Dark theme overrides */ }
+[data-theme="cyber"] { /* Cyber theme overrides */ }
+```
+
+## 📱 **Responsive Design**
+
+### **Breakpoints**
+- **Desktop** (1200px+) - Full sidebar and grid layout
+- **Tablet** (768px-1199px) - Compact sidebar
+- **Mobile** (480px-767px) - Horizontal category tabs
+- **Small Mobile** (<480px) - Optimized for small screens
+
+### **Mobile Optimizations**
+- Touch-friendly interactions
+- Swipe gestures for categories
+- Optimized button sizes
+- Simplified feature displays
+
+## 🔧 **Development Guide**
+
+### **Adding New Tools**
+
+1. **Create Tool Component**
+```tsx
+// src/pages/tools/NewTool.tsx
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+const NewTool: React.FC = () => {
+  // Tool implementation
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      {/* Tool UI */}
+    </div>
+  );
+};
+
+export default NewTool;
+```
+
+2. **Add to Tools Array**
+```tsx
+// src/components/ToolsDropdown.tsx
+const freeTools: Tool[] = [
+  // ... existing tools
+  {
+    id: 'new-tool',
+    name: 'New Tool',
+    description: 'Tool description',
+    icon: '🔧',
+    category: 'utility',
+    route: '/tools/new-tool',
+    features: ['Feature 1', 'Feature 2', 'Feature 3']
   }
-})
+];
 ```
 
-## 🚀 Performance Optimizations
-
-### Code Splitting
-- **Route-based Splitting** - Lazy load pages
-- **Component Splitting** - Dynamic imports for large components
-- **Vendor Chunking** - Separate vendor libraries
-
-### Image Processing
-- **Web Workers** - Offload heavy processing (optional)
-- **Canvas API** - Efficient image manipulation
-- **Memory Management** - Proper cleanup for large files
-- **Batch Processing** - Async file handling
-
-### Caching Strategy
-- **Service Worker** - Cache static assets
-- **Local Storage** - Persist user preferences
-- **Memory Caching** - Cache processed images temporarily
-
-## 🧪 Testing
-
-### Test Setup
-```bash
-# Run tests
-npm run test
-
-# Run tests with coverage
-npm run test:coverage
-
-# Run E2E tests
-npm run test:e2e
+3. **Add Route**
+```tsx
+// src/App.tsx
+<Route path="/tools/new-tool" element={<NewTool />} />
 ```
 
-### Testing Stack
-- **Vitest** - Fast unit testing
-- **React Testing Library** - Component testing
-- **Playwright** - End-to-end testing
-- **MSW** - API mocking
+### **Styling Guidelines**
+```css
+/* Use consistent spacing and colors */
+.tool-container {
+  @apply min-h-screen bg-gradient-to-br from-background via-background to-primary/5;
+}
 
-## 📦 Deployment
+.tool-header {
+  @apply text-center mb-8;
+}
 
-### Build for Production
-```bash
-npm run build
+.tool-content {
+  @apply max-w-6xl mx-auto px-4;
+}
 ```
 
-### Deployment Options
-- **Vercel** - Zero-config deployment
-- **Netlify** - Static site hosting
-- **GitHub Pages** - Free hosting for open source
-- **Docker** - Containerized deployment
+## 🔒 **Privacy & Security**
 
-### Docker Setup
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-RUN npm run build
-EXPOSE 8080
-CMD ["npm", "run", "preview"]
-```
+### **Client-Side Processing**
+- All file processing happens in the browser
+- No files are uploaded to servers
+- No data collection or tracking
+- GDPR compliant by design
 
-## 🤝 Contributing
+### **Security Features**
+- Content Security Policy (CSP) headers
+- Secure hash generation
+- Input validation and sanitization
+- XSS protection
 
-### Development Workflow
+## 🚀 **Performance Optimizations**
+
+### **Code Splitting**
+- Lazy loading for tool components
+- Dynamic imports for heavy libraries
+- Route-based code splitting
+
+### **Bundle Optimization**
+- Tree shaking for unused code
+- Minification and compression
+- Modern ES modules
+
+### **Caching Strategy**
+- Service worker for offline functionality
+- Browser caching for static assets
+- Local storage for user preferences
+
+## 📊 **Browser Support**
+
+### **Supported Browsers**
+- **Chrome** 90+ ✅
+- **Firefox** 88+ ✅
+- **Safari** 14+ ✅
+- **Edge** 90+ ✅
+
+### **Required Features**
+- ES2020 support
+- Canvas API
+- File API
+- Web Workers
+- Local Storage
+
+## 🤝 **Contributing**
+
+### **Development Workflow**
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Submit a pull request
+2. Create feature branch (`git checkout -b feature/new-tool`)
+3. Commit changes (`git commit -am 'Add new tool'`)
+4. Push to branch (`git push origin feature/new-tool`)
+5. Create Pull Request
 
-### Code Style
-- **ESLint** - Follow the configured rules
-- **Prettier** - Auto-format code
-- **TypeScript** - Use strict type checking
-- **Conventional Commits** - Follow commit message format
+### **Code Standards**
+- TypeScript for type safety
+- ESLint for code quality
+- Prettier for code formatting
+- Conventional commits
 
-### Pull Request Guidelines
-- Include tests for new features
-- Update documentation
-- Follow the existing code style
-- Add screenshots for UI changes
-
-## 📄 License
+## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## 🙏 **Acknowledgments**
 
-- **React Team** - For the amazing React framework
-- **Vite Team** - For the lightning-fast build tool
+- **React Team** - For the amazing framework
+- **Vite Team** - For the fast build tool
 - **Tailwind CSS** - For the utility-first CSS framework
-- **Framer Motion** - For smooth animations
-- **Lucide** - For beautiful icons
-- **Open Source Community** - For all the amazing libraries
+- **Framer Motion** - For beautiful animations
+- **Open Source Community** - For all the free libraries
 
-## 📞 Support
+## 📞 **Support**
 
-### Getting Help
-- 📖 **Documentation** - Check the [User Guide](/guide)
-- ❓ **FAQ** - Browse [Frequently Asked Questions](/faq)
-- 💬 **Discussions** - Join GitHub Discussions
-- 🐛 **Issues** - Report bugs on GitHub
-
-### Contact
-- **Email** - support@pixlyforge.com
-- **Twitter** - [@PixlyForge](https://twitter.com/pixlyforge)
-- **GitHub** - [Issues](https://github.com/yourusername/pixly-forge/issues)
+- **Documentation** - [GitHub Wiki](https://github.com/dilan1994/pixly-file-forge/wiki)
+- **Issues** - [GitHub Issues](https://github.com/dilan1994/pixly-file-forge/issues)
+- **Discussions** - [GitHub Discussions](https://github.com/dilan1994/pixly-file-forge/discussions)
 
 ---
 
-<div align="center">
-  <p>Made with ❤️ for creators worldwide</p>
-  <p>🔒 Privacy-first • 🚀 Fast • 🎨 Beautiful</p>
-</div>
+**Made with ❤️ for creators worldwide** 🌍

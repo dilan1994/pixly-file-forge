@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import Index from '@/pages/Index';
 import { GuidePage } from '@/pages/GuidePage';
 import { FAQPage } from '@/pages/FAQPage';
+import QRGenerator from '@/pages/tools/QRGenerator';
 import NotFound from '@/pages/NotFound';
 
 // Loading component for i18n
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/guide" element={<GuidePage />} />
                 <Route path="/faq" element={<FAQPage />} />
+                <Route path="/tools/qr-generator" element={<QRGenerator />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

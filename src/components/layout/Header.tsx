@@ -18,6 +18,7 @@ import {
   Sliders
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
+import ToolsDropdown from '@/components/ToolsDropdown';
 
 interface Language {
   code: string;
@@ -154,6 +155,9 @@ export const Header = () => {
             <Home className="w-4 h-4" />
             <span className="hidden sm:inline">{t('nav.converter')}</span>
           </Link>
+          
+          {/* Tools Dropdown */}
+          <ToolsDropdown />
           
           <Link
             to="/guide"
