@@ -9,27 +9,51 @@ import {
   Sun, 
   Monitor,
   Clock,
-  Zap
+  Zap,
+  Download,
+  Settings,
+  Globe,
+  ChevronDown,
+  Sliders
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 
 export const Header = () => {
   const location = useLocation();
-  const { theme, setTheme } = useAppStore();
+  const { 
+    theme, 
+    setTheme, 
+    autoDownload, 
+    setAutoDownload, 
+    defaultQuality, 
+    setDefaultQuality,
+    language,
+    setLanguage
+  } = useAppStore();
+  
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [userCountry, setUserCountry] = useState('US');
+  const [userLocation, setUserLocation] = useState('Global');
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+
+  const languages = [
+    { code: 'EN', name: 'English', flag: '🇺🇸' },
+    { code: 'ES', name: 'Español', flag: '🇪🇸' },
+    { code: 'FR', name: 'Français', flag: '🇫🇷' },
+    { code: 'DE', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'ZH', name: '中文', flag: '🇨🇳' },
+    { code: 'JA', name: '日本語', flag: '🇯🇵' }
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
 
-    // Detect user's country/timezone
+    // Detect user's timezone/location
     try {
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const country = timezone.split('/')[0] === 'America' ? 'US' : 
-                     timezone.split('/')[0] === 'Europe' ? 'EU' : 'US';
-      setUserCountry(country);
+      const region = timezone.split('/')[0];
+      setUserLocation(region);
     } catch (error) {
       console.log('Could not detect timezone');
     }
@@ -54,162 +78,161 @@ export const Header = () => {
     });
   };
 
-  const navItems = [
-    { path: '/', label: 'Home', icon: Home },
-    { path: '/guide', label: 'Guide', icon: BookOpen },
-    { path: '/faq', label: 'FAQ', icon: HelpCircle }
-  ];
-
-  const themeIcons = {
-    light: Sun,
-    dark: Moon,
-    cyberpunk: Monitor
+  const getQualityColor = (quality: number) => {
+    if (quality <= 0.3) return 'from-red-500 to-orange-500';
+    if (quality <= 0.7) return 'from-orange-500 to-yellow-500';
+    return 'from-yellow-500 to-green-500';
   };
 
-  const cycleTheme = () => {
-    const themes = ['light', 'dark', 'cyberpunk'] as const;
-    const currentIndex = themes.indexOf(theme);
-    const nextIndex = (currentIndex + 1) % themes.length;
-    setTheme(themes[nextIndex]);
-  };
+  const isActive = (path: string) => location.pathname === path;
 
-  const ThemeIcon = themeIcons[theme];
+  const ThemeIcon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor;
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     >
-      <div className="container flex h-16 items-center justify-between px-4">
-        {/* Logo/Brand */}
-        <Link to="/" className="flex items-center space-x-2">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center space-x-2"
-          >
-            <div className="relative">
-              <Zap className="h-8 w-8 text-primary" />
-              <div className="absolute inset-0 h-8 w-8 text-primary animate-pulse opacity-50" />
-            </div>
+      <nav className="main-navigation">
+        {/* Left Section - Logo */}
+        <div className="nav-left">
+          <Link to="/" className="flex items-center space-x-2">
+            <motion.div
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
+            >
+              <Zap className="w-5 h-5 text-primary-foreground" />
+            </motion.div>
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Pixly Forge
             </span>
-          </motion.div>
-        </Link>
+          </Link>
+        </div>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center space-x-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            
-            return (
-              <Link key={item.path} to={item.path}>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`
-                    flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200
-                    ${isActive 
-                      ? 'bg-primary text-primary-foreground shadow-lg' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                    }
-                  `}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span className="font-medium">{item.label}</span>
-                </motion.div>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Right Section */}
-        <div className="flex items-center space-x-4">
-          {/* Real-time Clock */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="hidden sm:flex items-center space-x-2 px-3 py-2 bg-accent/50 rounded-lg border"
+        {/* Center Section - Main Navigation */}
+        <div className="nav-center">
+          <Link
+            to="/"
+            className={`nav-button ${isActive('/') ? 'active' : ''}`}
           >
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <div className="text-sm">
-              <div className="font-mono font-semibold text-foreground">
+            <Home className="w-4 h-4" />
+            <span className="hidden sm:inline">Converter</span>
+          </Link>
+          
+          <Link
+            to="/guide"
+            className={`nav-button ${isActive('/guide') ? 'active' : ''}`}
+          >
+            <BookOpen className="w-4 h-4" />
+            <span className="hidden sm:inline">Guide</span>
+          </Link>
+          
+          <Link
+            to="/faq"
+            className={`nav-button ${isActive('/faq') ? 'active' : ''}`}
+          >
+            <HelpCircle className="w-4 h-4" />
+            <span className="hidden sm:inline">FAQ</span>
+          </Link>
+        </div>
+
+        {/* Right Section - Settings & Theme */}
+        <div className="nav-right">
+          {/* Settings Group */}
+          <div className="nav-settings-group">
+            {/* Auto Download Control */}
+            <div className="nav-setting-item">
+              <span className="nav-setting-label">Auto Download:</span>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setAutoDownload(!autoDownload)}
+                className={`nav-auto-download ${autoDownload ? 'active' : ''}`}
+              >
+                <motion.div
+                  animate={{ x: autoDownload ? 18 : 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                  className="nav-toggle-thumb"
+                />
+              </motion.button>
+            </div>
+
+            {/* Quality Control */}
+            <div className="nav-setting-item">
+              <span className="nav-setting-label">Quality:</span>
+              <div className="nav-quality-control">
+                <input
+                  type="range"
+                  min="0.1"
+                  max="1"
+                  step="0.1"
+                  value={defaultQuality}
+                  onChange={(e) => setDefaultQuality(parseFloat(e.target.value))}
+                  className={`nav-quality-slider bg-gradient-to-r ${getQualityColor(defaultQuality)}`}
+                />
+                <span className="nav-quality-value">
+                  {Math.round(defaultQuality * 100)}
+                </span>
+              </div>
+            </div>
+
+            {/* Language Selector */}
+            <div className="nav-setting-item">
+              <span className="nav-setting-label">Language:</span>
+              <div className="relative">
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="nav-language-selector appearance-none"
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.flag} {lang.code}
+                    </option>
+                  ))}
+                </select>
+                <Globe className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 pointer-events-none text-muted-foreground" />
+              </div>
+            </div>
+          </div>
+
+          {/* Clock & Location */}
+          <div className="nav-clock-section">
+            <div className="text-right">
+              <div className="text-sm font-mono font-semibold">
                 {formatTime(currentTime)}
               </div>
               <div className="text-xs text-muted-foreground">
-                {formatDate(currentTime)}
+                {formatDate(currentTime)} • 🌏 {userLocation}
               </div>
             </div>
-            <div className="text-xs px-1.5 py-0.5 bg-primary/10 text-primary rounded">
-              {userCountry}
-            </div>
-          </motion.div>
+          </div>
 
-          {/* Theme Toggle */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={cycleTheme}
-            className="flex items-center justify-center w-10 h-10 rounded-lg bg-accent hover:bg-accent/80 transition-colors"
-            title={`Current theme: ${theme}`}
-          >
-            <ThemeIcon className="h-4 w-4" />
-          </motion.button>
-
-          {/* Mobile Navigation Toggle */}
-          <div className="md:hidden">
+          {/* Theme Controls */}
+          <div className="theme-controls">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center justify-center w-10 h-10 rounded-lg bg-accent hover:bg-accent/80 transition-colors"
+              onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'cyber' : 'light')}
+              className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+              title="Toggle theme"
             >
-              <div className="space-y-1">
-                <div className="w-4 h-0.5 bg-foreground"></div>
-                <div className="w-4 h-0.5 bg-foreground"></div>
-                <div className="w-4 h-0.5 bg-foreground"></div>
-              </div>
+              {theme === 'light' ? (
+                <Sun className="w-4 h-4" />
+              ) : theme === 'dark' ? (
+                <Moon className="w-4 h-4" />
+              ) : (
+                <Zap className="w-4 h-4" />
+              )}
+              <span className="hidden lg:inline">
+                {theme === 'light' ? 'Light' : theme === 'dark' ? 'Dark' : 'Cyber'}
+              </span>
             </motion.button>
           </div>
         </div>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      <motion.div
-        initial={{ opacity: 0, height: 0 }}
-        animate={{ opacity: 1, height: 'auto' }}
-        className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur"
-      >
-        <div className="container px-4 py-4">
-          <nav className="flex flex-col space-y-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              
-              return (
-                <Link key={item.path} to={item.path}>
-                  <motion.div
-                    whileTap={{ scale: 0.95 }}
-                    className={`
-                      flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200
-                      ${isActive 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                      }
-                    `}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span className="font-medium">{item.label}</span>
-                  </motion.div>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-      </motion.div>
+      </nav>
     </motion.header>
   );
 };

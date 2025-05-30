@@ -44,6 +44,31 @@ const Index = () => {
     setSettings(prev => ({ ...prev, format: tab.toFormat }));
   };
 
+  const handleTabChangeById = (tabId: string) => {
+    // Define the conversion options to match the ones in ConversionButtons
+    const conversionOptions = [
+      { id: 'jpg-to-png', label: 'JPG → PNG', fromFormat: 'jpg' as const, toFormat: 'png' as const, description: 'Convert JPEG to PNG with transparency support' },
+      { id: 'png-to-jpg', label: 'PNG → JPG', fromFormat: 'png' as const, toFormat: 'jpg' as const, description: 'Convert PNG to JPEG with compression' },
+      { id: 'heic-to-jpg', label: 'HEIC → JPG', fromFormat: 'heic' as const, toFormat: 'jpg' as const, description: 'Convert iPhone HEIC photos to JPG' },
+      { id: 'webp-to-png', label: 'WebP → PNG', fromFormat: 'webp' as const, toFormat: 'png' as const, description: 'Convert modern WebP to PNG format' },
+      { id: 'webp-to-jpg', label: 'WebP → JPG', fromFormat: 'webp' as const, toFormat: 'jpg' as const, description: 'Convert WebP to JPEG format' },
+      { id: 'pdf-to-jpg', label: 'PDF → JPG', fromFormat: 'pdf' as const, toFormat: 'jpg' as const, description: 'Extract images from PDF documents' },
+      { id: 'bmp-to-png', label: 'BMP → PNG', fromFormat: 'bmp' as const, toFormat: 'png' as const, description: 'Convert bitmap images to PNG' },
+      { id: 'tiff-to-jpg', label: 'TIFF → JPG', fromFormat: 'tiff' as const, toFormat: 'jpg' as const, description: 'Convert high-quality TIFF to JPG' },
+      { id: 'gif-to-png', label: 'GIF → PNG', fromFormat: 'gif' as const, toFormat: 'png' as const, description: 'Convert animated GIF to static PNG' },
+      { id: 'svg-to-png', label: 'SVG → PNG', fromFormat: 'svg' as const, toFormat: 'png' as const, description: 'Convert vector SVG to raster PNG' },
+      { id: 'ico-to-png', label: 'ICO → PNG', fromFormat: 'ico' as const, toFormat: 'png' as const, description: 'Convert icon files to PNG format' },
+      { id: 'any-to-webp', label: 'Any → WebP', fromFormat: 'jpg' as const, toFormat: 'webp' as const, description: 'Convert any image to modern WebP' }
+    ];
+
+    const selectedTab = conversionOptions.find(option => option.id === tabId);
+    if (selectedTab) {
+      setActiveTab(selectedTab.id);
+      setCurrentConversion(selectedTab);
+      setSettings(prev => ({ ...prev, format: selectedTab.toFormat }));
+    }
+  };
+
   const handleFilesAdded = (newFiles: File[]) => {
     addFiles(newFiles, currentConversion.toFormat);
   };
@@ -59,6 +84,11 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <Toaster position="top-right" />
       
+      {/* ENHANCED VERSION BANNER */}
+      <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white text-center py-2 px-4 font-bold">
+        🚀 ENHANCED VERSION LOADED - Modern UI with 12 Conversion Options & Advanced Features 🚀
+      </div>
+      
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <motion.div 
@@ -67,12 +97,15 @@ const Index = () => {
           className="text-center mb-12"
         >
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
-            Convert Images Instantly
+            Convert Images Instantly ✨
           </h1>
           <p className="text-xl text-text/70 max-w-2xl mx-auto">
             Transform your images between formats with high quality and lightning speed. 
             All processing happens securely in your browser.
           </p>
+          <div className="mt-4 text-sm text-green-600 font-semibold">
+            🚀 Enhanced Version - Updated with Modern UI & Features
+          </div>
         </motion.div>
 
         {/* Conversion Buttons - Inline Rectangular Small Buttons */}
@@ -83,7 +116,7 @@ const Index = () => {
         >
           <ConversionButtons 
             activeTab={activeTab} 
-            onTabChange={handleTabChange} 
+            onTabChange={handleTabChangeById} 
           />
         </motion.div>
 
@@ -251,53 +284,85 @@ const Index = () => {
             transition={{ delay: 0.6 }}
             className="mt-16"
           >
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Powerful Image Conversion Features
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Convert your images between multiple formats with high quality and speed. 
-                All processing happens in your browser for maximum privacy.
+            {/* Enhanced Feature Cards Section */}
+            <section className="features-section">
+              <h2 className="features-title">Powerful Image Conversion Features</h2>
+              <p className="features-subtitle">
+                Convert your images between multiple formats with high quality and speed. All processing 
+                happens in your browser for maximum privacy.
               </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <FileImage className="w-6 h-6 text-blue-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Multiple Formats
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Support for JPG, PNG, WebP, HEIC, BMP, and GIF formats with high-quality conversion.
-                </p>
+              
+              <div className="features-grid">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="feature-card feature-card-multiple"
+                >
+                  <div className="feature-card-content">
+                    <div className="feature-icon">
+                      <FileImage className="w-8 h-8" />
+                    </div>
+                    <h3 className="feature-title">12 Format Support</h3>
+                    <p className="feature-description">
+                      Support for JPG, PNG, WebP, HEIC, BMP, TIFF, GIF, SVG, ICO, and PDF formats 
+                      with high-quality conversion and transparency preservation.
+                    </p>
+                    <div className="feature-action">
+                      <span>Learn more</span>
+                      <span>→</span>
+                    </div>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="feature-card feature-card-batch"
+                >
+                  <div className="feature-card-content">
+                    <div className="feature-icon">
+                      <Upload className="w-8 h-8" />
+                    </div>
+                    <h3 className="feature-title">Batch Processing</h3>
+                    <p className="feature-description">
+                      Convert multiple images at once with drag & drop support, progress tracking, 
+                      and queue management for efficient bulk processing.
+                    </p>
+                    <div className="feature-action">
+                      <span>Start batch conversion</span>
+                      <span>→</span>
+                    </div>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="feature-card feature-card-download"
+                >
+                  <div className="feature-card-content">
+                    <div className="feature-icon">
+                      <Download className="w-8 h-8" />
+                    </div>
+                    <h3 className="feature-title">Easy Download</h3>
+                    <p className="feature-description">
+                      Download converted files individually or as a ZIP archive for bulk downloads. 
+                      Auto-download option available for seamless workflow.
+                    </p>
+                    <div className="feature-action">
+                      <span>Download options</span>
+                      <span>→</span>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <Upload className="w-6 h-6 text-green-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Batch Processing
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Convert multiple images at once with drag & drop support and progress tracking.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <Download className="w-6 h-6 text-purple-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Easy Download
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Download converted files individually or as a ZIP archive for bulk downloads.
-                </p>
-              </div>
-            </div>
+            </section>
           </motion.div>
         )}
       </div>

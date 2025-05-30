@@ -1,231 +1,438 @@
-
-import { useState } from 'react';
-import { Search, ChevronDown, ChevronRight, HelpCircle } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Search, 
+  ChevronDown, 
+  ChevronUp, 
+  HelpCircle, 
+  FileImage, 
+  Settings, 
+  Download, 
+  Shield, 
+  Zap,
+  ThumbsUp,
+  ThumbsDown,
+  Star,
+  Filter,
+  X
+} from 'lucide-react';
 
-const faqData = [
+interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+  tags: string[];
+  helpful: number;
+  notHelpful: number;
+}
+
+const faqData: FAQ[] = [
   {
-    category: 'General',
-    questions: [
-      {
-        id: 1,
-        question: 'What file formats are supported?',
-        answer: 'We support JPG, JPEG, PNG, WebP, HEIC, BMP, GIF, and PDF files for conversion.',
-      },
-      {
-        id: 2,
-        question: 'Is there a file size limit?',
-        answer: 'Yes, each file must be under 10MB. For larger files, consider compressing them first.',
-      },
-      {
-        id: 3,
-        question: 'Are my files stored on your servers?',
-        answer: 'No, all processing happens in your browser. Your files never leave your device.',
-      },
-    ],
+    id: '1',
+    question: 'What image formats are supported?',
+    answer: 'We support a wide range of image formats including JPG/JPEG, PNG, WebP, HEIC, BMP, GIF, TIFF, ICO, SVG, and PDF. You can convert between any of these formats with high quality preservation.',
+    category: 'File Formats',
+    tags: ['formats', 'supported', 'jpg', 'png', 'webp', 'heic'],
+    helpful: 45,
+    notHelpful: 2
   },
   {
-    category: 'Conversion',
-    questions: [
-      {
-        id: 4,
-        question: 'How do I convert HEIC files?',
-        answer: 'Simply select "HEIC to JPG" from the tabs and upload your HEIC files. The conversion happens automatically.',
-      },
-      {
-        id: 5,
-        question: 'Can I adjust the quality of converted images?',
-        answer: 'Yes, click the Settings button to adjust quality from 10% to 100%. Lower quality means smaller file size.',
-      },
-      {
-        id: 6,
-        question: 'Can I convert multiple files at once?',
-        answer: 'Absolutely! You can upload and convert multiple files simultaneously using batch processing.',
-      },
-    ],
+    id: '2',
+    question: 'Is there a file size limit?',
+    answer: 'Yes, the maximum file size is 10MB per image. This limit ensures optimal performance and prevents browser memory issues. For larger files, consider compressing them first or using our batch processing feature.',
+    category: 'File Formats',
+    tags: ['size', 'limit', 'maximum', '10mb'],
+    helpful: 38,
+    notHelpful: 5
   },
   {
-    category: 'Troubleshooting',
-    questions: [
-      {
-        id: 7,
-        question: 'Why is my conversion failing?',
-        answer: 'Common causes include unsupported file formats, corrupted files, or files that are too large. Check the file requirements.',
-      },
-      {
-        id: 8,
-        question: 'The download is not working',
-        answer: 'Make sure your browser allows downloads. Some browsers block automatic downloads for security reasons.',
-      },
-      {
-        id: 9,
-        question: 'Can I use this tool offline?',
-        answer: 'The initial loading requires internet, but once loaded, the conversion works offline since it processes files locally.',
-      },
-    ],
+    id: '3',
+    question: 'Are my images uploaded to your servers?',
+    answer: 'No, absolutely not! All image processing happens locally in your browser using JavaScript and WebAssembly. Your images never leave your device, ensuring complete privacy and security.',
+    category: 'Privacy & Security',
+    tags: ['privacy', 'security', 'local', 'browser', 'upload'],
+    helpful: 67,
+    notHelpful: 1
   },
+  {
+    id: '4',
+    question: 'How do I adjust the output quality?',
+    answer: 'You can adjust the output quality using the quality slider in the header navigation or in the settings panel. Higher quality (90-100%) is best for professional use, while lower quality (50-70%) is ideal for web optimization.',
+    category: 'Settings',
+    tags: ['quality', 'settings', 'slider', 'compression'],
+    helpful: 29,
+    notHelpful: 3
+  },
+  {
+    id: '5',
+    question: 'Can I convert multiple images at once?',
+    answer: 'Yes! You can upload multiple images simultaneously and convert them all at once. Use drag and drop or the file picker to select multiple files. You can also download all converted files as a ZIP archive.',
+    category: 'Features',
+    tags: ['batch', 'multiple', 'bulk', 'zip'],
+    helpful: 52,
+    notHelpful: 2
+  },
+  {
+    id: '6',
+    question: 'Why should I use WebP format?',
+    answer: 'WebP is a modern image format that provides superior compression compared to JPEG and PNG. It can reduce file sizes by 25-50% while maintaining the same visual quality, making it perfect for web use.',
+    category: 'File Formats',
+    tags: ['webp', 'compression', 'modern', 'web'],
+    helpful: 34,
+    notHelpful: 4
+  },
+  {
+    id: '7',
+    question: 'How do I convert iPhone HEIC photos?',
+    answer: 'Simply select the "HEIC → JPG" conversion option and upload your HEIC files. Our converter automatically handles Apple\'s HEIC format and converts it to widely compatible JPG format.',
+    category: 'Features',
+    tags: ['heic', 'iphone', 'apple', 'jpg', 'photos'],
+    helpful: 41,
+    notHelpful: 3
+  },
+  {
+    id: '8',
+    question: 'Does the converter work offline?',
+    answer: 'Yes! Once the page is loaded, the converter works completely offline. All processing happens in your browser, so you don\'t need an internet connection to convert images.',
+    category: 'Features',
+    tags: ['offline', 'browser', 'local', 'internet'],
+    helpful: 28,
+    notHelpful: 1
+  },
+  {
+    id: '9',
+    question: 'What happens to transparency in PNG images?',
+    answer: 'When converting PNG to JPG, transparency is replaced with a white background since JPG doesn\'t support transparency. When converting to PNG or WebP, transparency is preserved.',
+    category: 'File Formats',
+    tags: ['transparency', 'png', 'jpg', 'alpha'],
+    helpful: 33,
+    notHelpful: 2
+  },
+  {
+    id: '10',
+    question: 'Can I use keyboard shortcuts?',
+    answer: 'Yes! We support several keyboard shortcuts: Ctrl+O to upload files, Ctrl+V to paste from clipboard, Ctrl+Enter to start conversion, and Ctrl+Delete to clear all files.',
+    category: 'Features',
+    tags: ['keyboard', 'shortcuts', 'hotkeys', 'productivity'],
+    helpful: 19,
+    notHelpful: 1
+  },
+  {
+    id: '11',
+    question: 'Is there a mobile app available?',
+    answer: 'Currently, we offer a responsive web application that works great on mobile devices. A dedicated mobile app is in development and will be available soon.',
+    category: 'Features',
+    tags: ['mobile', 'app', 'responsive', 'development'],
+    helpful: 15,
+    notHelpful: 8
+  },
+  {
+    id: '12',
+    question: 'How do I report a bug or request a feature?',
+    answer: 'You can contact us through the support page or send an email to support@pixlyforge.com. We appreciate all feedback and actively work on improving the converter based on user suggestions.',
+    category: 'Support',
+    tags: ['bug', 'feature', 'support', 'contact', 'feedback'],
+    helpful: 22,
+    notHelpful: 0
+  }
 ];
 
-export default function FAQPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [expandedItems, setExpandedItems] = useState<number[]>([]);
+const categories = ['All', 'File Formats', 'Features', 'Settings', 'Privacy & Security', 'Support'];
+
+export const FAQPage = () => {
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [helpfulVotes, setHelpfulVotes] = useState<Record<string, 'helpful' | 'not-helpful' | null>>({});
 
-  const categories = ['All', ...faqData.map(cat => cat.category)];
+  const filteredFAQs = useMemo(() => {
+    return faqData.filter(faq => {
+      const matchesSearch = searchQuery === '' || 
+        faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        faq.answer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        faq.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      
+      const matchesCategory = selectedCategory === 'All' || faq.category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchQuery, selectedCategory]);
 
-  const toggleItem = (id: number) => {
-    setExpandedItems(prev =>
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
+  const toggleExpanded = (id: string) => {
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
   };
 
-  const filteredFAQ = faqData
-    .filter(category => selectedCategory === 'All' || category.category === selectedCategory)
-    .map(category => ({
-      ...category,
-      questions: category.questions.filter(q =>
-        q.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        q.answer.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-    }))
-    .filter(category => category.questions.length > 0);
+  const handleVote = (faqId: string, vote: 'helpful' | 'not-helpful') => {
+    setHelpfulVotes(prev => ({
+      ...prev,
+      [faqId]: prev[faqId] === vote ? null : vote
+    }));
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
             Frequently Asked Questions
           </h1>
-          <p className="text-xl text-text/70 max-w-2xl mx-auto">
-            Find answers to common questions about using our image converter tool.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Find answers to common questions about our image converter. Can't find what you're looking for? Contact our support team.
           </p>
         </motion.div>
 
         {/* Search and Filter */}
-        <div className="mb-8 space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text/50" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-card border border-border rounded-xl p-6 mb-8"
+        >
+          {/* Search Bar */}
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search questions..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-surface border border-primary/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+              placeholder="Search questions, answers, or tags..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
             />
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
+          {/* Category Filter */}
+          <div className="flex items-center gap-2 mb-4">
+            <Filter className="w-4 h-4 text-muted-foreground" />
+            <span className="text-sm font-medium text-muted-foreground">Filter by category:</span>
+          </div>
           <div className="flex flex-wrap gap-2">
             {categories.map((category) => (
-              <button
+              <motion.button
                 key={category}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category)}
                 className={`
-                  px-4 py-2 rounded-lg text-sm font-medium transition-all
+                  px-4 py-2 rounded-lg text-sm font-medium transition-colors
                   ${selectedCategory === category
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'bg-surface text-text/70 hover:text-text hover:bg-surface/70'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-accent text-accent-foreground hover:bg-accent/80'
                   }
                 `}
               >
                 {category}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
 
-        {/* FAQ Content */}
-        <div className="space-y-6">
-          {filteredFAQ.map((category, categoryIndex) => (
-            <motion.div
-              key={category.category}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: categoryIndex * 0.1 }}
-            >
-              <h2 className="text-2xl font-bold mb-4 text-primary">{category.category}</h2>
-              <div className="space-y-2">
-                {category.questions.map((item, index) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: (categoryIndex * 0.1) + (index * 0.05) }}
-                    className="bg-surface/50 border border-primary/20 rounded-lg overflow-hidden"
-                  >
-                    <button
-                      onClick={() => toggleItem(item.id)}
-                      className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-primary/5 transition-colors"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <HelpCircle className="w-5 h-5 text-primary shrink-0" />
-                        <span className="font-medium">{item.question}</span>
+          {/* Results Count */}
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-sm text-muted-foreground">
+              {filteredFAQs.length} {filteredFAQs.length === 1 ? 'question' : 'questions'} found
+              {searchQuery && ` for "${searchQuery}"`}
+              {selectedCategory !== 'All' && ` in ${selectedCategory}`}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* FAQ Items */}
+        <div className="space-y-4">
+          <AnimatePresence>
+            {filteredFAQs.map((faq, index) => (
+              <motion.div
+                key={faq.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ delay: index * 0.05 }}
+                className="bg-card border border-border rounded-xl overflow-hidden"
+              >
+                <motion.button
+                  onClick={() => toggleExpanded(faq.id)}
+                  className="w-full p-6 text-left hover:bg-accent/50 transition-colors"
+                  whileHover={{ backgroundColor: 'rgba(var(--accent), 0.5)' }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1 pr-4">
+                      <h3 className="text-lg font-semibold mb-2">{faq.question}</h3>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <span className="px-2 py-1 bg-accent rounded text-xs font-medium">
+                          {faq.category}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <ThumbsUp className="w-3 h-3" />
+                          <span>{faq.helpful}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 text-yellow-500" />
+                          <span>{Math.round((faq.helpful / (faq.helpful + faq.notHelpful)) * 100)}% helpful</span>
+                        </div>
                       </div>
-                      {expandedItems.includes(item.id) ? (
-                        <ChevronDown className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-shrink-0">
+                      {expandedItems.has(faq.id) ? (
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
                       ) : (
-                        <ChevronRight className="w-5 h-5 text-primary" />
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
-                    </button>
+                    </div>
+                  </div>
+                </motion.button>
 
-                    <AnimatePresence>
-                      {expandedItems.includes(item.id) && (
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: 'auto' }}
-                          exit={{ height: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-6 pb-4 pt-2 border-t border-primary/10">
-                            <p className="text-text/70 leading-relaxed">{item.answer}</p>
+                <AnimatePresence>
+                  {expandedItems.has(faq.id) && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="border-t border-border"
+                    >
+                      <div className="p-6">
+                        <div className="prose prose-gray dark:prose-invert max-w-none mb-6">
+                          <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
+                        </div>
+
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {faq.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-1 bg-accent/50 text-accent-foreground rounded text-xs"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Helpful Voting */}
+                        <div className="flex items-center justify-between pt-4 border-t border-border">
+                          <span className="text-sm text-muted-foreground">Was this helpful?</span>
+                          <div className="flex items-center gap-2">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleVote(faq.id, 'helpful')}
+                              className={`
+                                flex items-center gap-1 px-3 py-1 rounded-lg text-sm transition-colors
+                                ${helpfulVotes[faq.id] === 'helpful'
+                                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                  : 'bg-accent text-accent-foreground hover:bg-accent/80'
+                                }
+                              `}
+                            >
+                              <ThumbsUp className="w-4 h-4" />
+                              Yes
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleVote(faq.id, 'not-helpful')}
+                              className={`
+                                flex items-center gap-1 px-3 py-1 rounded-lg text-sm transition-colors
+                                ${helpfulVotes[faq.id] === 'not-helpful'
+                                  ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                  : 'bg-accent text-accent-foreground hover:bg-accent/80'
+                                }
+                              `}
+                            >
+                              <ThumbsDown className="w-4 h-4" />
+                              No
+                            </motion.button>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
-        {filteredFAQ.length === 0 && (
+        {/* No Results */}
+        {filteredFAQs.length === 0 && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className="text-center py-12"
           >
-            <HelpCircle className="w-16 h-16 text-text/30 mx-auto mb-4" />
+            <HelpCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-2">No questions found</h3>
-            <p className="text-text/60">Try searching with different keywords or browse all categories.</p>
+            <p className="text-muted-foreground mb-6">
+              Try adjusting your search terms or browse a different category.
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('All');
+              }}
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+            >
+              Clear Filters
+            </motion.button>
           </motion.div>
         )}
 
-        {/* Contact Section */}
+        {/* Contact Support */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-16 bg-surface/30 rounded-xl p-8 border border-primary/20 text-center"
+          transition={{ delay: 0.3 }}
+          className="mt-12 bg-card border border-border rounded-xl p-8 text-center"
         >
-          <h2 className="text-2xl font-bold mb-4">Still have questions?</h2>
-          <p className="text-text/70 mb-6">
-            Can't find what you're looking for? Our converter is designed to be intuitive and user-friendly.
+          <h2 className="text-2xl font-bold mb-4">Still need help?</h2>
+          <p className="text-muted-foreground mb-6">
+            Can't find the answer you're looking for? Our support team is here to help.
           </p>
-          <div className="flex justify-center">
-            <div className="bg-primary/10 px-6 py-3 rounded-lg">
-              <p className="text-sm text-primary font-medium">
-                Try the interactive guide for step-by-step instructions
-              </p>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Contact Support
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-6 py-3 bg-accent text-accent-foreground rounded-lg font-medium hover:bg-accent/80 transition-colors"
+            >
+              <FileImage className="w-4 h-4" />
+              Request Feature
+            </motion.button>
           </div>
         </motion.div>
       </div>
     </div>
   );
-}
+};

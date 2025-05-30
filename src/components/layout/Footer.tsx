@@ -12,8 +12,10 @@ import {
   HelpCircle,
   BookOpen,
   Zap,
-  Shield
+  Shield,
+  Star
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const Footer = () => {
   const [showPreferences, setShowPreferences] = useState(false);
@@ -26,46 +28,38 @@ export const Footer = () => {
     setAutoDownload,
     setDefaultQuality,
     setPreferredFormat,
-    theme
+    theme,
+    setTheme,
+    language,
+    setLanguage
   } = useAppStore();
 
-  const footerSections = [
-    {
-      title: 'Product',
-      links: [
-        { label: 'Image Converter', href: '/', icon: Zap },
-        { label: 'Batch Processing', href: '/#batch', icon: Download },
-        { label: 'API Access', href: '/api', icon: Settings },
-        { label: 'Mobile App', href: '/mobile', icon: Globe }
-      ]
-    },
-    {
-      title: 'Resources',
-      links: [
-        { label: 'User Guide', href: '/guide', icon: BookOpen },
-        { label: 'FAQ', href: '/faq', icon: HelpCircle },
-        { label: 'Blog', href: '/blog', icon: FileText },
-        { label: 'Changelog', href: '/changelog', icon: FileText }
-      ]
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'About Us', href: '/about', icon: Heart },
-        { label: 'Contact', href: '/contact', icon: Mail },
-        { label: 'Support', href: '/support', icon: HelpCircle },
-        { label: 'Careers', href: '/careers', icon: Globe }
-      ]
-    },
-    {
-      title: 'Legal',
-      links: [
-        { label: 'Privacy Policy', href: '/privacy', icon: Shield },
-        { label: 'Terms of Service', href: '/terms', icon: FileText },
-        { label: 'Cookie Policy', href: '/cookies', icon: Settings },
-        { label: 'GDPR', href: '/gdpr', icon: Shield }
-      ]
-    }
+  const productLinks = [
+    { label: 'Image Converter', href: '/', icon: Zap },
+    { label: 'Batch Processing', href: '/#batch', icon: Download },
+    { label: 'API Access', href: '/api', icon: Settings },
+    { label: 'Mobile App', href: '/mobile', icon: Globe }
+  ];
+
+  const resourceLinks = [
+    { label: 'User Guide', href: '/guide', icon: BookOpen },
+    { label: 'FAQ', href: '/faq', icon: HelpCircle },
+    { label: 'Blog', href: '/blog', icon: FileText },
+    { label: 'Changelog', href: '/changelog', icon: Star }
+  ];
+
+  const companyLinks = [
+    { label: 'About Us', href: '/about', icon: Heart },
+    { label: 'Contact', href: '/contact', icon: Mail },
+    { label: 'Support', href: '/support', icon: HelpCircle },
+    { label: 'Careers', href: '/careers', icon: Globe }
+  ];
+
+  const legalLinks = [
+    { label: 'Privacy Policy', href: '/privacy', icon: Shield },
+    { label: 'Terms of Service', href: '/terms', icon: FileText },
+    { label: 'Cookie Policy', href: '/cookies', icon: Settings },
+    { label: 'GDPR', href: '/gdpr', icon: Shield }
   ];
 
   const socialLinks = [
@@ -75,180 +69,226 @@ export const Footer = () => {
     { label: 'Email', href: 'mailto:support@pixlyforge.com', icon: Mail }
   ];
 
-  const qualityPresets = [
-    { label: 'High', value: 0.9 },
-    { label: 'Medium', value: 0.7 },
-    { label: 'Low', value: 0.5 }
+  const languages = [
+    { code: 'EN', name: 'English', flag: '🇺🇸' },
+    { code: 'ES', name: 'Español', flag: '🇪🇸' },
+    { code: 'FR', name: 'Français', flag: '🇫🇷' },
+    { code: 'DE', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'ZH', name: '中文', flag: '🇨🇳' },
+    { code: 'JA', name: '日本語', flag: '🇯🇵' }
   ];
 
-  return (
-    <footer className="bg-background border-t border-border/40">
-      {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {footerSections.map((section, index) => (
-            <motion.div
-              key={section.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="space-y-4"
-            >
-              <h3 className="text-lg font-semibold text-foreground">
-                {section.title}
-              </h3>
-              <ul className="space-y-3">
-                {section.links.map((link) => {
-                  const Icon = link.icon;
-                  return (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors group"
-                      >
-                        <Icon className="h-4 w-4 group-hover:text-primary transition-colors" />
-                        <span className="text-sm">{link.label}</span>
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
+  const formats = ['PNG', 'JPG', 'WebP', 'HEIC'];
+  const qualityPresets = [
+    { label: 'Low', value: 0.3 },
+    { label: 'Medium', value: 0.7 },
+    { label: 'High', value: 0.9 },
+    { label: 'Max', value: 1.0 }
+  ];
 
-        {/* Social Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mt-12 pt-8 border-t border-border/40"
-        >
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-2">
-              <Zap className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+  const FooterColumn = ({ title, links }: { title: string; links: typeof productLinks }) => (
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      <ul className="space-y-3">
+        {links.map((link) => {
+          const Icon = link.icon;
+          return (
+            <li key={link.label}>
+              <Link
+                to={link.href}
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+              >
+                <Icon className="w-3 h-3 group-hover:scale-110 transition-transform" />
+                {link.label}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+
+  return (
+    <motion.footer
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5 }}
+      className="glass-footer mt-16 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+    >
+      {/* Main Footer Content */}
+      <div className="footer-main">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          {/* Footer Links Grid */}
+          <div className="footer-links-grid grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            <FooterColumn title="Product" links={productLinks} />
+            <FooterColumn title="Resources" links={resourceLinks} />
+            <FooterColumn title="Company" links={companyLinks} />
+            <FooterColumn title="Legal" links={legalLinks} />
+          </div>
+
+          {/* Social Links */}
+          <div className="footer-social flex justify-center space-x-6 mb-8">
+            {socialLinks.map((social) => {
+              const Icon = social.icon;
+              return (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-accent hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  title={social.label}
+                >
+                  <Icon className="w-5 h-5" />
+                </motion.a>
+              );
+            })}
+          </div>
+
+          {/* Brand Section */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
+                className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
+              >
+                <Zap className="w-5 h-5 text-primary-foreground" />
+              </motion.div>
+              <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Pixly Forge
               </span>
             </div>
-            
-            <div className="flex items-center space-x-4">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="flex items-center justify-center w-10 h-10 rounded-lg bg-accent hover:bg-accent/80 text-muted-foreground hover:text-foreground transition-colors"
-                    title={social.label}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </motion.a>
-                );
-              })}
-            </div>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              Transform your images with professional-grade conversion tools. 
+              Fast, secure, and completely browser-based processing.
+            </p>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Preferences Bar */}
-      <div className="border-t border-border/40 bg-accent/30">
-        <div className="container mx-auto px-4 py-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0"
-          >
-            {/* Preferences Controls */}
-            <div className="flex flex-wrap items-center gap-6">
-              {/* Clock Format Toggle */}
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-muted-foreground">Time:</span>
-                <button
-                  onClick={() => setClockFormat(clockFormat === '12h' ? '24h' : '12h')}
-                  className={`
-                    px-3 py-1 rounded-md text-xs font-medium transition-colors
-                    ${clockFormat === '12h' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-accent text-accent-foreground hover:bg-accent/80'
-                    }
-                  `}
-                >
-                  12H
-                </button>
-                <button
-                  onClick={() => setClockFormat(clockFormat === '24h' ? '12h' : '24h')}
-                  className={`
-                    px-3 py-1 rounded-md text-xs font-medium transition-colors
-                    ${clockFormat === '24h' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-accent text-accent-foreground hover:bg-accent/80'
-                    }
-                  `}
-                >
-                  24H
-                </button>
-              </div>
+      <div className="footer-bottom border-t bg-accent/30">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="preferences-bar grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-center">
+            {/* Language Selector */}
+            <div className="preference-item">
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                Language
+              </label>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="w-full px-2 py-1 text-xs bg-background border border-border rounded text-foreground"
+              >
+                {languages.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.flag} {lang.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              {/* Auto Download Toggle */}
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-muted-foreground">Auto Download:</span>
-                <button
-                  onClick={() => setAutoDownload(!autoDownload)}
-                  className={`
-                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-                    ${autoDownload ? 'bg-primary' : 'bg-accent'}
-                  `}
-                >
-                  <span
-                    className={`
-                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                      ${autoDownload ? 'translate-x-6' : 'translate-x-1'}
-                    `}
-                  />
-                </button>
-              </div>
-
-              {/* Quality Presets */}
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-muted-foreground">Quality:</span>
-                <div className="flex space-x-1">
-                  {qualityPresets.map((preset) => (
-                    <button
-                      key={preset.label}
-                      className="px-2 py-1 rounded text-xs font-medium bg-accent text-accent-foreground hover:bg-accent/80 transition-colors"
-                    >
-                      {preset.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Language Selector */}
-              <div className="flex items-center space-x-2">
-                <Globe className="h-4 w-4 text-muted-foreground" />
-                <select className="bg-accent text-accent-foreground text-xs rounded px-2 py-1 border-0">
-                  <option value="en">🇺🇸 English</option>
-                  <option value="es">🇪🇸 Español</option>
-                  <option value="fr">🇫🇷 Français</option>
-                  <option value="de">🇩🇪 Deutsch</option>
-                  <option value="zh">🇨🇳 中文</option>
-                </select>
+            {/* Quality Presets */}
+            <div className="preference-item">
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                Quality Preset
+              </label>
+              <div className="flex gap-1">
+                {qualityPresets.map((preset) => (
+                  <button
+                    key={preset.label}
+                    onClick={() => setDefaultQuality(preset.value)}
+                    className={`px-2 py-1 text-xs rounded transition-colors ${
+                      Math.abs(defaultQuality - preset.value) < 0.1
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-accent text-accent-foreground hover:bg-accent/80'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Copyright */}
-            <div className="text-xs text-muted-foreground">
-              © 2024 Pixly Forge. Made with{' '}
-              <Heart className="inline h-3 w-3 text-red-500" />{' '}
-              for creators worldwide.
+            {/* Auto-save Toggle */}
+            <div className="preference-item">
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                Auto Download
+              </label>
+              <button
+                onClick={() => setAutoDownload(!autoDownload)}
+                className={`flex items-center gap-2 px-3 py-1 text-xs rounded transition-colors ${
+                  autoDownload
+                    ? 'bg-green-500 text-white'
+                    : 'bg-accent text-accent-foreground hover:bg-accent/80'
+                }`}
+              >
+                <Download className="w-3 h-3" />
+                {autoDownload ? 'Enabled' : 'Disabled'}
+              </button>
             </div>
-          </motion.div>
+
+            {/* Default Format */}
+            <div className="preference-item">
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                Default Format
+              </label>
+              <select
+                value={preferredFormat}
+                onChange={(e) => setPreferredFormat(e.target.value)}
+                className="w-full px-2 py-1 text-xs bg-background border border-border rounded text-foreground"
+              >
+                {formats.map((format) => (
+                  <option key={format} value={format.toLowerCase()}>
+                    {format}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Theme Selector */}
+            <div className="preference-item">
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                Theme
+              </label>
+              <div className="flex gap-1">
+                {(['light', 'dark', 'cyber'] as const).map((themeOption) => (
+                  <button
+                    key={themeOption}
+                    onClick={() => setTheme(themeOption)}
+                    className={`px-2 py-1 text-xs rounded transition-colors capitalize ${
+                      theme === themeOption
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-accent text-accent-foreground hover:bg-accent/80'
+                    }`}
+                  >
+                    {themeOption}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </footer>
+
+      {/* Copyright */}
+      <div className="border-t bg-background/50">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground">
+            <div className="flex items-center gap-1 mb-2 md:mb-0">
+              <span>© 2024 Pixly Forge. Made with</span>
+              <Heart className="w-3 h-3 text-red-500 fill-current" />
+              <span>for creators worldwide.</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span>All processing happens in your browser</span>
+              <Shield className="w-3 h-3 text-green-500" />
+              <span>Privacy-first design</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.footer>
   );
 };

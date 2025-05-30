@@ -16,7 +16,7 @@ export interface ConversionSettings {
   maintainAspectRatio: boolean;
 }
 
-export type SupportedFormat = 'jpg' | 'jpeg' | 'png' | 'webp' | 'heic' | 'bmp' | 'gif' | 'pdf' | 'tiff' | 'ico';
+export type SupportedFormat = 'jpg' | 'jpeg' | 'png' | 'webp' | 'heic' | 'bmp' | 'gif' | 'pdf' | 'tiff' | 'ico' | 'svg';
 
 export interface ConversionTab {
   id: string;
