@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Settings, Trash2, Play, FileImage, Upload, Download } from 'lucide-react';
 import { ConversionTabs } from '@/components/ConversionTabs';
+import { ConversionButtons } from '@/components/ConversionButtons';
 import { FileUpload } from '@/components/FileUpload';
 import { FileQueue } from '@/components/FileQueue';
 import { ConverterButton } from '@/components/ui/ConverterButton';
@@ -75,23 +75,37 @@ const Index = () => {
           </p>
         </motion.div>
 
-        {/* Conversion Tabs */}
+        {/* Conversion Buttons - Inline Rectangular Small Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+        >
+          <ConversionButtons 
+            activeTab={activeTab} 
+            onTabChange={handleTabChange} 
+          />
+        </motion.div>
+
+        {/* Conversion Tabs - Large Square Cards (Hidden) */}
+        {/* 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
         >
           <ConversionTabs 
             activeTab={activeTab} 
             onTabChange={handleTabChange} 
           />
         </motion.div>
+        */}
 
         {/* Upload Area */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3 }}
           className="mb-8"
         >
           <FileUpload
@@ -106,7 +120,7 @@ const Index = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.4 }}
             className="mb-6"
           >
             <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -224,7 +238,7 @@ const Index = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.5 }}
         >
           <FileQueue files={files} onRemoveFile={removeFile} />
         </motion.div>
@@ -234,7 +248,7 @@ const Index = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.6 }}
             className="mt-16"
           >
             <div className="text-center mb-8">

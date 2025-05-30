@@ -1,4 +1,3 @@
-
 export interface ConvertedFile {
   id: string;
   originalFile: File;
@@ -17,7 +16,7 @@ export interface ConversionSettings {
   maintainAspectRatio: boolean;
 }
 
-export type SupportedFormat = 'jpg' | 'jpeg' | 'png' | 'webp' | 'heic' | 'bmp' | 'gif' | 'pdf';
+export type SupportedFormat = 'jpg' | 'jpeg' | 'png' | 'webp' | 'heic' | 'bmp' | 'gif' | 'pdf' | 'tiff' | 'ico';
 
 export interface ConversionTab {
   id: string;
@@ -26,4 +25,5 @@ export interface ConversionTab {
   toFormat: SupportedFormat;
   description: string;
   icon?: string;
+  gradient?: string;
 }
