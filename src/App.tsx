@@ -5,6 +5,7 @@ import './i18n'; // Import i18n configuration
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
+import { PWAProvider } from '@/components/pwa/PWAProvider';
 import Index from '@/pages/Index';
 import { GuidePage } from '@/pages/GuidePage';
 import { FAQPage } from '@/pages/FAQPage';
@@ -20,6 +21,7 @@ import { ChangelogPage } from '@/pages/ChangelogPage';
 import { APIAccessPage } from '@/pages/APIAccessPage';
 import QRGenerator from '@/pages/tools/QRGenerator';
 import NotFound from '@/pages/NotFound';
+import { MobileAppPage } from '@/pages/MobileAppPage';
 
 // Loading component for i18n
 const LoadingSpinner = () => (
@@ -31,44 +33,54 @@ const LoadingSpinner = () => (
 function App() {
   return (
     <ThemeProvider>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Router>
-          <div className="min-h-screen bg-background text-foreground">
-            <Header />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/guide" element={<GuidePage />} />
-                <Route path="/faq" element={<FAQPage />} />
-                <Route path="/about" element={<AboutUsPage />} />
-                <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                <Route path="/support" element={<SupportPage />} />
-                <Route path="/terms" element={<TermsOfServicePage />} />
-                <Route path="/careers" element={<CareersPage />} />
-                <Route path="/contact" element={<ContactSupportPage />} />
-                <Route path="/cookies" element={<CookiesPolicyPage />} />
-                <Route path="/gdpr" element={<GDPRCompliancePage />} />
-                <Route path="/changelog" element={<ChangelogPage />} />
-                <Route path="/api" element={<APIAccessPage />} />
-                <Route path="/tools/qr-generator" element={<QRGenerator />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-            <Toaster 
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: 'rgb(var(--background))',
-                  color: 'rgb(var(--foreground))',
-                  border: '1px solid rgb(var(--border))',
-                },
-              }}
-            />
-          </div>
-        </Router>
-      </Suspense>
+      <PWAProvider
+        enableInstallPrompt={true}
+        enableUpdateNotifications={true}
+        enableOfflineIndicator={true}
+        installPromptVariant="banner"
+        updateNotificationVariant="toast"
+        offlineIndicatorVariant="banner"
+      >
+        <Suspense fallback={<LoadingSpinner />}>
+          <Router>
+            <div className="min-h-screen bg-background text-foreground">
+              <Header />
+              <main className="flex-1">
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/guide" element={<GuidePage />} />
+                  <Route path="/faq" element={<FAQPage />} />
+                  <Route path="/about" element={<AboutUsPage />} />
+                  <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                  <Route path="/support" element={<SupportPage />} />
+                  <Route path="/terms" element={<TermsOfServicePage />} />
+                  <Route path="/careers" element={<CareersPage />} />
+                  <Route path="/contact" element={<ContactSupportPage />} />
+                  <Route path="/cookies" element={<CookiesPolicyPage />} />
+                  <Route path="/gdpr" element={<GDPRCompliancePage />} />
+                  <Route path="/changelog" element={<ChangelogPage />} />
+                  <Route path="/api" element={<APIAccessPage />} />
+                  <Route path="/mobile" element={<MobileAppPage />} />
+                  <Route path="/tools/qr-generator" element={<QRGenerator />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <Footer />
+              <Toaster 
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: 'rgb(var(--background))',
+                    color: 'rgb(var(--foreground))',
+                    border: '1px solid rgb(var(--border))',
+                  },
+                }}
+              />
+            </div>
+          </Router>
+        </Suspense>
+      </PWAProvider>
     </ThemeProvider>
   );
 }

@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:build": "npm run build && echo 'Build completed! Ready for deployment.'",
+    "deploy:check": "git status && echo 'Checking deployment status...'",
+    "predeploy": "npm run lint && npm run build"
   },
   "dependencies": {
     "react": "^18.2.0",

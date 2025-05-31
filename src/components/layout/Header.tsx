@@ -15,7 +15,8 @@ import {
   Settings,
   Globe,
   ChevronDown,
-  Sliders
+  Sliders,
+  Smartphone
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import ToolsDropdown from '@/components/ToolsDropdown';
@@ -165,6 +166,14 @@ export const Header = () => {
           >
             <BookOpen className="w-4 h-4" />
             <span className="hidden sm:inline">{t('nav.guide')}</span>
+          </Link>
+          
+          <Link
+            to="/mobile"
+            className={`nav-button ${isActive('/mobile') ? 'active' : ''}`}
+          >
+            <Smartphone className="w-4 h-4" />
+            <span className="hidden sm:inline">Mobile</span>
           </Link>
           
           <Link
