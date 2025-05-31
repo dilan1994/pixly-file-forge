@@ -253,15 +253,60 @@ export class ButtonEffectsManager {
       });
     }
     
-    // Trigger the gradient flow
+    // Add immediate click effect
+    element.classList.add('click-active');
+    setTimeout(() => {
+      element.classList.remove('click-active');
+    }, 300);
+    
+    // Trigger the gradient flow with enhanced visibility
     element.classList.remove('gradient-active');
     // Force reflow
     element.offsetHeight;
     element.classList.add('gradient-active');
     
-    // Remove the class after animation
+    // Add a temporary glow effect
+    const originalBoxShadow = element.style.boxShadow;
+    element.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.8), 0 0 40px rgba(147, 51, 234, 0.6)';
+    
+    // Remove the class and glow after animation
     setTimeout(() => {
       element.classList.remove('gradient-active');
+      element.style.boxShadow = originalBoxShadow;
+    }, 1200);
+    
+    // Add ripple effect at click position
+    this.createManualRipple(element);
+  }
+
+  /**
+   * Create manual ripple effect for better visibility
+   */
+  private createManualRipple(element: HTMLElement): void {
+    const rect = element.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const radius = size / 2;
+
+    // Center the ripple
+    const x = rect.width / 2 - radius;
+    const y = rect.height / 2 - radius;
+
+    const ripple = document.createElement('span');
+    ripple.className = 'button-ripple';
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    ripple.style.background = 'radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, rgba(147, 51, 234, 0.6) 50%, transparent 70%)';
+
+    // Remove existing ripples
+    const existingRipples = element.querySelectorAll('.button-ripple');
+    existingRipples.forEach(r => r.remove());
+
+    element.appendChild(ripple);
+
+    // Remove ripple after animation
+    setTimeout(() => {
+      ripple.remove();
     }, 800);
   }
 

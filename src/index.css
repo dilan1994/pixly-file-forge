@@ -2666,7 +2666,7 @@ body {
   opacity: 0;
 }
 
-/* Active Gradient Flow on Click */
+/* Active Gradient Flow on Click - Enhanced */
 .nav-button.gradient-active::before,
 .tools-button.gradient-active::before,
 .conversion-tab-inline.gradient-active::before,
@@ -2677,24 +2677,63 @@ body {
 .explore-button.gradient-active::before {
   left: 0;
   opacity: 1;
-  animation: gradientFlow 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: gradientFlow 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Gradient Flow Keyframes */
+/* Gradient Flow Keyframes - Enhanced for Better Visibility */
 @keyframes gradientFlow {
   0% {
     left: -100%;
     opacity: 0;
-    transform: skewX(-15deg);
+    transform: skewX(-15deg) scale(1.2);
+  }
+  25% {
+    opacity: 0.8;
+    transform: skewX(-5deg) scale(1.1);
   }
   50% {
     opacity: 1;
-    transform: skewX(0deg);
+    transform: skewX(0deg) scale(1);
+  }
+  75% {
+    opacity: 0.8;
+    transform: skewX(5deg) scale(1.1);
   }
   100% {
     left: 100%;
     opacity: 0;
-    transform: skewX(15deg);
+    transform: skewX(15deg) scale(1.2);
+  }
+}
+
+/* Enhanced Ripple Effect */
+@keyframes rippleEffect {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Enhanced Button Click Effect */
+@keyframes buttonClickPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: var(--button-hover-shadow);
+  }
+  50% {
+    transform: scale(0.95);
+    box-shadow: var(--button-active-shadow);
+  }
+  100% {
+    transform: scale(1.05);
+    box-shadow: var(--button-hover-shadow);
   }
 }
 
@@ -2748,11 +2787,12 @@ body {
   --button-border-color: rgba(59, 130, 246, 0.2);
   --button-text-color: #374151;
   
-  /* Gradient Flow Colors */
+  /* Gradient Flow Colors - Enhanced Visibility */
   --button-gradient-flow: linear-gradient(135deg, 
-    rgba(59, 130, 246, 0.3) 0%, 
-    rgba(147, 51, 234, 0.3) 50%, 
-    rgba(16, 185, 129, 0.3) 100%);
+    rgba(59, 130, 246, 0.8) 0%, 
+    rgba(147, 51, 234, 0.8) 30%, 
+    rgba(16, 185, 129, 0.8) 60%,
+    rgba(245, 158, 11, 0.8) 100%);
   
   /* Hover States */
   --button-hover-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
@@ -2765,7 +2805,7 @@ body {
   --button-active-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
   
   /* Ripple Effect */
-  --ripple-color: rgba(59, 130, 246, 0.3);
+  --ripple-color: rgba(59, 130, 246, 0.6);
 }
 
 /* ===== DARK THEME BUTTON COLORS ===== */
@@ -2775,11 +2815,12 @@ body {
   --button-border-color: rgba(96, 165, 250, 0.2);
   --button-text-color: #f8fafc;
   
-  /* Gradient Flow Colors */
+  /* Gradient Flow Colors - Enhanced Visibility */
   --button-gradient-flow: linear-gradient(135deg, 
-    rgba(96, 165, 250, 0.4) 0%, 
-    rgba(168, 85, 247, 0.4) 50%, 
-    rgba(52, 211, 153, 0.4) 100%);
+    rgba(96, 165, 250, 0.9) 0%, 
+    rgba(168, 85, 247, 0.9) 30%, 
+    rgba(52, 211, 153, 0.9) 60%,
+    rgba(251, 191, 36, 0.9) 100%);
   
   /* Hover States */
   --button-hover-shadow: 0 8px 25px rgba(96, 165, 250, 0.3);
@@ -2792,7 +2833,7 @@ body {
   --button-active-shadow: 0 4px 20px rgba(96, 165, 250, 0.4);
   
   /* Ripple Effect */
-  --ripple-color: rgba(96, 165, 250, 0.4);
+  --ripple-color: rgba(96, 165, 250, 0.7);
 }
 
 /* ===== CYBER THEME BUTTON COLORS ===== */
@@ -2802,11 +2843,13 @@ body {
   --button-border-color: rgba(0, 255, 136, 0.3);
   --button-text-color: #00ff88;
   
-  /* Gradient Flow Colors */
+  /* Gradient Flow Colors - Enhanced Visibility */
   --button-gradient-flow: linear-gradient(135deg, 
-    rgba(0, 255, 136, 0.5) 0%, 
-    rgba(0, 204, 255, 0.5) 50%, 
-    rgba(255, 0, 128, 0.5) 100%);
+    rgba(0, 255, 136, 1) 0%, 
+    rgba(0, 204, 255, 1) 25%, 
+    rgba(255, 0, 128, 1) 50%,
+    rgba(255, 255, 0, 1) 75%,
+    rgba(0, 255, 136, 1) 100%);
   
   /* Hover States */
   --button-hover-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
@@ -2819,7 +2862,7 @@ body {
   --button-active-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
   
   /* Ripple Effect */
-  --ripple-color: rgba(0, 255, 136, 0.5);
+  --ripple-color: rgba(0, 255, 136, 0.8);
 }
 
 /* ===== SUCCESS AND ENHANCED BUTTON STATES ===== */
@@ -3017,4 +3060,16 @@ body {
     rgba(255, 0, 128, 0.15) 100%);
   border-color: rgba(0, 255, 136, 0.5);
   box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+}
+
+/* Immediate Click Effect */
+.nav-button.click-active,
+.tools-button.click-active,
+.conversion-tab-inline.click-active,
+.theme-btn.click-active,
+.clock-format-toggle.click-active,
+.nav-language-selector.click-active,
+.feature-action-enhanced.click-active,
+.explore-button.click-active {
+  animation: buttonClickPulse 0.3s ease-out forwards;
 }
