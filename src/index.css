@@ -91,6 +91,25 @@
   --text-contrast-low: #6b7280;
   --border-contrast: rgba(0, 0, 0, 0.2);
   --bg-contrast: rgba(255, 255, 255, 1);
+  
+  /* Gradient Flow Colors */
+  --button-gradient-flow: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.3) 0%, 
+    rgba(147, 51, 234, 0.3) 50%, 
+    rgba(16, 185, 129, 0.3) 100%);
+  
+  /* Hover States */
+  --button-hover-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+  --button-hover-border: rgba(59, 130, 246, 0.4);
+  
+  /* Active States */
+  --button-active-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  --button-active-text: #ffffff;
+  --button-active-border: #3b82f6;
+  --button-active-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+  
+  /* Ripple Effect */
+  --ripple-color: rgba(59, 130, 246, 0.3);
 }
 
 /* Dark Theme */
@@ -2617,4 +2636,326 @@ body {
   border-color: #00ff88;
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
+}
+
+/* ===== FUTURISTIC BUTTON SYSTEM WITH GRADIENT FLOW ===== */
+
+/* Base Button Styles with Gradient Flow */
+.nav-button,
+.tools-button,
+.conversion-tab-inline,
+.theme-btn,
+.clock-format-toggle,
+.nav-language-selector,
+.feature-action-enhanced,
+.explore-button {
+  position: relative;
+  overflow: hidden;
+  background: var(--button-gradient-base);
+  border: 1px solid var(--button-border-color);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Gradient Flow Animation Base */
+.nav-button::before,
+.tools-button::before,
+.conversion-tab-inline::before,
+.theme-btn::before,
+.clock-format-toggle::before,
+.nav-language-selector::before,
+.feature-action-enhanced::before,
+.explore-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--button-gradient-flow);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  opacity: 0;
+}
+
+/* Active Gradient Flow on Click */
+.nav-button.gradient-active::before,
+.tools-button.gradient-active::before,
+.conversion-tab-inline.gradient-active::before,
+.theme-btn.gradient-active::before,
+.clock-format-toggle.gradient-active::before,
+.nav-language-selector.gradient-active::before,
+.feature-action-enhanced.gradient-active::before,
+.explore-button.gradient-active::before {
+  left: 0;
+  opacity: 1;
+  animation: gradientFlow 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Gradient Flow Keyframes */
+@keyframes gradientFlow {
+  0% {
+    left: -100%;
+    opacity: 0;
+    transform: skewX(-15deg);
+  }
+  50% {
+    opacity: 1;
+    transform: skewX(0deg);
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+    transform: skewX(15deg);
+  }
+}
+
+/* Ripple Effect */
+.button-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--ripple-color);
+  transform: scale(0);
+  animation: rippleEffect 0.6s linear;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Enhanced Hover Effects */
+.nav-button:hover,
+.tools-button:hover,
+.conversion-tab-inline:hover,
+.theme-btn:hover,
+.clock-format-toggle:hover,
+.nav-language-selector:hover,
+.feature-action-enhanced:hover,
+.explore-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--button-hover-shadow);
+  border-color: var(--button-hover-border);
+}
+
+/* Active State Enhancements */
+.nav-button.active,
+.conversion-tab-inline.active,
+.theme-btn.active {
+  background: var(--button-active-gradient);
+  color: var(--button-active-text);
+  border-color: var(--button-active-border);
+  box-shadow: var(--button-active-shadow);
+  transform: translateY(-1px);
+}
+
+/* ===== LIGHT THEME BUTTON COLORS ===== */
+[data-theme="light"] {
+  /* Base Button Colors */
+  --button-gradient-base: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  --button-border-color: rgba(59, 130, 246, 0.2);
+  --button-text-color: #374151;
+  
+  /* Gradient Flow Colors */
+  --button-gradient-flow: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.3) 0%, 
+    rgba(147, 51, 234, 0.3) 50%, 
+    rgba(16, 185, 129, 0.3) 100%);
+  
+  /* Hover States */
+  --button-hover-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+  --button-hover-border: rgba(59, 130, 246, 0.4);
+  
+  /* Active States */
+  --button-active-gradient: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  --button-active-text: #ffffff;
+  --button-active-border: #3b82f6;
+  --button-active-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+  
+  /* Ripple Effect */
+  --ripple-color: rgba(59, 130, 246, 0.3);
+}
+
+/* ===== SUCCESS AND ENHANCED BUTTON STATES ===== */
+
+/* Success Button State */
+.button-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4) !important;
+  animation: successPulse 0.6s ease-out !important;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+/* Enhanced Shimmer Effect */
+.button-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+  z-index: 1;
+}
+
+[data-theme="dark"] .button-shimmer::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(96, 165, 250, 0.3),
+    transparent
+  );
+}
+
+[data-theme="cyber"] .button-shimmer::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 136, 0.4),
+    transparent
+  );
+}
+
+/* Enhanced Loading State */
+.button-loading {
+  pointer-events: none;
+  opacity: 0.7;
+  position: relative;
+}
+
+.button-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 2;
+}
+
+/* Glow Effects for Different Themes */
+[data-theme="light"] .nav-button.active,
+[data-theme="light"] .conversion-tab-inline.active {
+  box-shadow: 
+    0 4px 20px rgba(59, 130, 246, 0.4),
+    0 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .nav-button.active,
+[data-theme="dark"] .conversion-tab-inline.active {
+  box-shadow: 
+    0 4px 20px rgba(96, 165, 250, 0.5),
+    0 0 0 1px rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="cyber"] .nav-button.active,
+[data-theme="cyber"] .conversion-tab-inline.active {
+  box-shadow: 
+    0 4px 20px rgba(0, 255, 136, 0.6),
+    0 0 0 1px rgba(0, 255, 136, 0.4),
+    0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+/* Enhanced Hover Transitions */
+.nav-button,
+.tools-button,
+.conversion-tab-inline,
+.theme-btn,
+.clock-format-toggle {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow, border-color;
+}
+
+/* Micro-interactions */
+.nav-button:active,
+.tools-button:active,
+.conversion-tab-inline:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* Focus Ring Enhancement */
+.nav-button:focus-visible,
+.tools-button:focus-visible,
+.conversion-tab-inline:focus-visible {
+  outline: 2px solid var(--button-active-border);
+  outline-offset: 2px;
+  box-shadow: 
+    var(--button-hover-shadow),
+    0 0 0 4px rgba(var(--primary), 0.2);
+}
+
+/* Disabled State */
+.nav-button:disabled,
+.tools-button:disabled,
+.conversion-tab-inline:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===== THEME-SPECIFIC ENHANCEMENTS ===== */
+
+/* Light Theme Enhancements */
+[data-theme="light"] .nav-button:hover,
+[data-theme="light"] .tools-button:hover,
+[data-theme="light"] .conversion-tab-inline:hover {
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.1) 0%, 
+    rgba(147, 51, 234, 0.1) 100%);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+}
+
+/* Dark Theme Enhancements */
+[data-theme="dark"] .nav-button:hover,
+[data-theme="dark"] .tools-button:hover,
+[data-theme="dark"] .conversion-tab-inline:hover {
+  background: linear-gradient(135deg, 
+    rgba(96, 165, 250, 0.15) 0%, 
+    rgba(168, 85, 247, 0.15) 100%);
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow: 0 8px 25px rgba(96, 165, 250, 0.3);
+}
+
+/* Cyber Theme Enhancements */
+[data-theme="cyber"] .nav-button:hover,
+[data-theme="cyber"] .tools-button:hover,
+[data-theme="cyber"] .conversion-tab-inline:hover {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 136, 0.15) 0%, 
+    rgba(255, 0, 128, 0.15) 100%);
+  border-color: rgba(0, 255, 136, 0.5);
+  box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
 }

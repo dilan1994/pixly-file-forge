@@ -22,6 +22,11 @@ import { APIAccessPage } from '@/pages/APIAccessPage';
 import QRGenerator from '@/pages/tools/QRGenerator';
 import NotFound from '@/pages/NotFound';
 import { MobileAppPage } from '@/pages/MobileAppPage';
+import { useEffect } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import { useAppStore } from '@/store/useAppStore';
+import { buttonEffects } from '@/utils/buttonEffects';
+import i18n from '@/i18n';
 
 // Loading component for i18n
 const LoadingSpinner = () => (
@@ -31,6 +36,28 @@ const LoadingSpinner = () => (
 );
 
 function App() {
+  const { theme } = useAppStore();
+
+  useEffect(() => {
+    // Set theme attribute on document element
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Initialize button effects after theme change
+    setTimeout(() => {
+      buttonEffects.initializeAllButtons();
+    }, 100);
+  }, [theme]);
+
+  useEffect(() => {
+    // Initialize button effects on mount
+    buttonEffects.initializeAllButtons();
+    
+    // Cleanup on unmount
+    return () => {
+      buttonEffects.cleanup();
+    };
+  }, []);
+
   return (
     <ThemeProvider>
       <PWAProvider
