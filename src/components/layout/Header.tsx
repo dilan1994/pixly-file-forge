@@ -77,6 +77,11 @@ export const Header = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Debug clockFormat changes
+  useEffect(() => {
+    console.log(`🕐 Clock format changed to: ${clockFormat}`);
+  }, [clockFormat]);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = () => {
@@ -268,14 +273,19 @@ export const Header = () => {
           <div className="nav-clock-section">
             <div className="text-right">
               <div className="flex items-center gap-2">
-                <div className="text-sm font-mono font-semibold">
-                  {formatTime(currentTime)}
+                <div className="text-sm font-mono font-semibold flex items-center gap-1">
+                  <span className="text-primary">{formatTime(currentTime)}</span>
+                  <span className="text-xs text-muted-foreground bg-accent px-1 rounded">
+                    {clockFormat}
+                  </span>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
-                    setClockFormat(clockFormat === '12h' ? '24h' : '12h');
+                    const newFormat = clockFormat === '12h' ? '24h' : '12h';
+                    console.log(`🕐 Clock format changing from ${clockFormat} to ${newFormat}`);
+                    setClockFormat(newFormat);
                     // Manually trigger gradient flow effect
                     const target = e.currentTarget as HTMLElement;
                     buttonEffects.manuallyTriggerGradientFlow(target);
@@ -284,7 +294,7 @@ export const Header = () => {
                   title={`Switch to ${clockFormat === '12h' ? '24-hour' : '12-hour'} format`}
                 >
                   <Clock className="w-3 h-3" />
-                  <span className="text-xs">{clockFormat}</span>
+                  <span className="text-xs font-bold">Toggle</span>
                 </motion.button>
               </div>
               <div className="text-xs text-muted-foreground">
