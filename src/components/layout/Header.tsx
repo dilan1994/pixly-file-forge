@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import ToolsDropdown from '@/components/ToolsDropdown';
+import { buttonEffects } from '@/utils/buttonEffects';
 
 interface Language {
   code: string;
@@ -196,7 +197,12 @@ export const Header = () => {
               <span className="nav-setting-label">{t('nav.auto')}</span>
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setAutoDownload(!autoDownload)}
+                onClick={(e) => {
+                  setAutoDownload(!autoDownload);
+                  // Manually trigger gradient flow effect
+                  const target = e.currentTarget as HTMLElement;
+                  buttonEffects.manuallyTriggerGradientFlow(target);
+                }}
                 className={`nav-auto-download ${autoDownload ? 'active' : ''}`}
               >
                 <motion.div
@@ -268,7 +274,12 @@ export const Header = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setClockFormat(clockFormat === '12h' ? '24h' : '12h')}
+                  onClick={(e) => {
+                    setClockFormat(clockFormat === '12h' ? '24h' : '12h');
+                    // Manually trigger gradient flow effect
+                    const target = e.currentTarget as HTMLElement;
+                    buttonEffects.manuallyTriggerGradientFlow(target);
+                  }}
                   className="clock-format-toggle"
                   title={`Switch to ${clockFormat === '12h' ? '24-hour' : '12-hour'} format`}
                 >
@@ -287,7 +298,12 @@ export const Header = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'cyber' : 'light')}
+              onClick={(e) => {
+                setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'cyber' : 'light');
+                // Manually trigger gradient flow effect
+                const target = e.currentTarget as HTMLElement;
+                buttonEffects.manuallyTriggerGradientFlow(target);
+              }}
               className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
               title="Toggle theme"
             >

@@ -149,14 +149,20 @@ export class ButtonEffectsManager {
       '.conversion-tab-inline',
       '.theme-btn',
       '.clock-format-toggle',
+      '.nav-language-selector',
       '.feature-action-enhanced',
       '.explore-button'
     ];
 
+    console.log('🎨 Initializing button effects...');
+
     buttonSelectors.forEach(selector => {
       const buttons = document.querySelectorAll<HTMLElement>(selector);
-      buttons.forEach(button => {
+      console.log(`Found ${buttons.length} buttons for selector: ${selector}`);
+      
+      buttons.forEach((button, index) => {
         if (!this.activeButtons.has(button)) {
+          console.log(`Initializing button ${index + 1} for ${selector}`);
           this.initializeButton(button, {
             gradientFlow: true,
             rippleEffect: true,
@@ -165,6 +171,27 @@ export class ButtonEffectsManager {
         }
       });
     });
+
+    // Special handling for clock format toggle
+    this.initializeClockFormatToggle();
+  }
+
+  /**
+   * Special initialization for clock format toggle
+   */
+  private initializeClockFormatToggle(): void {
+    // Wait a bit for React to render the component
+    setTimeout(() => {
+      const clockToggle = document.querySelector<HTMLElement>('.clock-format-toggle');
+      if (clockToggle && !this.activeButtons.has(clockToggle)) {
+        console.log('🕐 Initializing clock format toggle with special handling');
+        this.initializeButton(clockToggle, {
+          gradientFlow: true,
+          rippleEffect: true,
+          pulseOnActive: false
+        });
+      }
+    }, 500);
   }
 
   /**
@@ -207,6 +234,35 @@ export class ButtonEffectsManager {
       element.classList.remove('button-success');
       element.innerHTML = originalHTML;
     }, 1500);
+  }
+
+  /**
+   * Manually trigger gradient flow on any element
+   */
+  manuallyTriggerGradientFlow(element: HTMLElement): void {
+    if (!element) return;
+    
+    console.log('🌊 Manually triggering gradient flow on:', element.className);
+    
+    // Ensure the element has the necessary styles
+    if (!this.activeButtons.has(element)) {
+      this.initializeButton(element, {
+        gradientFlow: true,
+        rippleEffect: true,
+        pulseOnActive: false
+      });
+    }
+    
+    // Trigger the gradient flow
+    element.classList.remove('gradient-active');
+    // Force reflow
+    element.offsetHeight;
+    element.classList.add('gradient-active');
+    
+    // Remove the class after animation
+    setTimeout(() => {
+      element.classList.remove('gradient-active');
+    }, 800);
   }
 
   /**
