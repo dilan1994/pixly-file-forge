@@ -8,6 +8,16 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import Index from '@/pages/Index';
 import { GuidePage } from '@/pages/GuidePage';
 import { FAQPage } from '@/pages/FAQPage';
+import { AboutUsPage } from '@/pages/AboutUsPage';
+import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
+import { SupportPage } from '@/pages/SupportPage';
+import { TermsOfServicePage } from '@/pages/TermsOfServicePage';
+import { CareersPage } from '@/pages/CareersPage';
+import { ContactSupportPage } from '@/pages/ContactSupportPage';
+import { CookiesPolicyPage } from '@/pages/CookiesPolicyPage';
+import { GDPRCompliancePage } from '@/pages/GDPRCompliancePage';
+import { ChangelogPage } from '@/pages/ChangelogPage';
+import { APIAccessPage } from '@/pages/APIAccessPage';
 import QRGenerator from '@/pages/tools/QRGenerator';
 import NotFound from '@/pages/NotFound';
 
@@ -30,6 +40,16 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/guide" element={<GuidePage />} />
                 <Route path="/faq" element={<FAQPage />} />
+                <Route path="/about" element={<AboutUsPage />} />
+                <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/support" element={<SupportPage />} />
+                <Route path="/terms" element={<TermsOfServicePage />} />
+                <Route path="/careers" element={<CareersPage />} />
+                <Route path="/contact" element={<ContactSupportPage />} />
+                <Route path="/cookies" element={<CookiesPolicyPage />} />
+                <Route path="/gdpr" element={<GDPRCompliancePage />} />
+                <Route path="/changelog" element={<ChangelogPage />} />
+                <Route path="/api" element={<APIAccessPage />} />
                 <Route path="/tools/qr-generator" element={<QRGenerator />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
