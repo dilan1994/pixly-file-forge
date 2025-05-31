@@ -976,33 +976,57 @@ body {
   padding: 0 0.75rem;
 }
 
-/* Clock Format Toggle Button */
+/* Clock Format Toggle Button - Enhanced with Futuristic Effects */
 .clock-format-toggle {
   display: flex;
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  background: var(--button-bg);
-  border: 1px solid var(--border-color);
+  background: var(--button-gradient-base);
+  border: 1px solid var(--button-border-color);
   border-radius: 0.5rem;
-  color: var(--text-secondary);
+  color: var(--button-text-color);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.75rem;
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  will-change: transform, box-shadow, border-color;
 }
 
 .clock-format-toggle:hover {
-  background: var(--button-hover-bg);
-  border-color: var(--accent-color);
-  color: var(--text-primary);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px var(--shadow-color);
+  background: var(--button-gradient-base);
+  border-color: var(--button-hover-border);
+  color: var(--button-text-color);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--button-hover-shadow);
 }
 
 .clock-format-toggle:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 4px var(--shadow-color);
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* Clock Format Toggle Gradient Flow */
+.clock-format-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--button-gradient-flow);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  opacity: 0;
+}
+
+.clock-format-toggle.gradient-active::before {
+  left: 0;
+  opacity: 1;
+  animation: gradientFlow 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Responsive Navigation */
@@ -2599,45 +2623,8 @@ body {
   color: var(--text-primary);
 }
 
-[data-theme="light"] .clock-format-toggle {
-  background: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  color: var(--text-secondary);
-}
-
-[data-theme="light"] .clock-format-toggle:hover {
-  background: rgba(248, 250, 252, 1);
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-}
-
 /* Clock Section Dark Theme */
-[data-theme="dark"] .clock-format-toggle {
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-}
-
-[data-theme="dark"] .clock-format-toggle:hover {
-  background: rgba(51, 65, 85, 0.9);
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-}
-
 /* Clock Section Cyber Theme */
-[data-theme="cyber"] .clock-format-toggle {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(0, 255, 136, 0.3);
-  color: #00ff88;
-}
-
-[data-theme="cyber"] .clock-format-toggle:hover {
-  background: rgba(20, 20, 20, 0.9);
-  border-color: #00ff88;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
-}
-
 /* ===== FUTURISTIC BUTTON SYSTEM WITH GRADIENT FLOW ===== */
 
 /* Base Button Styles with Gradient Flow */
@@ -2781,6 +2768,60 @@ body {
   --ripple-color: rgba(59, 130, 246, 0.3);
 }
 
+/* ===== DARK THEME BUTTON COLORS ===== */
+[data-theme="dark"] {
+  /* Base Button Colors */
+  --button-gradient-base: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.9) 100%);
+  --button-border-color: rgba(96, 165, 250, 0.2);
+  --button-text-color: #f8fafc;
+  
+  /* Gradient Flow Colors */
+  --button-gradient-flow: linear-gradient(135deg, 
+    rgba(96, 165, 250, 0.4) 0%, 
+    rgba(168, 85, 247, 0.4) 50%, 
+    rgba(52, 211, 153, 0.4) 100%);
+  
+  /* Hover States */
+  --button-hover-shadow: 0 8px 25px rgba(96, 165, 250, 0.3);
+  --button-hover-border: rgba(96, 165, 250, 0.5);
+  
+  /* Active States */
+  --button-active-gradient: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+  --button-active-text: #ffffff;
+  --button-active-border: #60a5fa;
+  --button-active-shadow: 0 4px 20px rgba(96, 165, 250, 0.4);
+  
+  /* Ripple Effect */
+  --ripple-color: rgba(96, 165, 250, 0.4);
+}
+
+/* ===== CYBER THEME BUTTON COLORS ===== */
+[data-theme="cyber"] {
+  /* Base Button Colors */
+  --button-gradient-base: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 20, 0.9) 100%);
+  --button-border-color: rgba(0, 255, 136, 0.3);
+  --button-text-color: #00ff88;
+  
+  /* Gradient Flow Colors */
+  --button-gradient-flow: linear-gradient(135deg, 
+    rgba(0, 255, 136, 0.5) 0%, 
+    rgba(0, 204, 255, 0.5) 50%, 
+    rgba(255, 0, 128, 0.5) 100%);
+  
+  /* Hover States */
+  --button-hover-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+  --button-hover-border: rgba(0, 255, 136, 0.5);
+  
+  /* Active States */
+  --button-active-gradient: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+  --button-active-text: #000000;
+  --button-active-border: #00ff88;
+  --button-active-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+  
+  /* Ripple Effect */
+  --ripple-color: rgba(0, 255, 136, 0.5);
+}
+
 /* ===== SUCCESS AND ENHANCED BUTTON STATES ===== */
 
 /* Success Button State */
@@ -2802,6 +2843,24 @@ body {
   }
   100% {
     transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
