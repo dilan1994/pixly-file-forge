@@ -957,6 +957,35 @@ body {
   padding: 0 0.75rem;
 }
 
+/* Clock Format Toggle Button */
+.clock-format-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--button-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.clock-format-toggle:hover {
+  background: var(--button-hover-bg);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.clock-format-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px var(--shadow-color);
+}
+
 /* Responsive Navigation */
 @media (max-width: 1024px) {
   .nav-settings-group {
@@ -2540,4 +2569,52 @@ body {
     height: 40px;
     font-size: 1.25rem;
   }
+}
+
+/* Clock Section Light Theme */
+[data-theme="light"] .nav-clock-section {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .current-time {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .clock-format-toggle {
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .clock-format-toggle:hover {
+  background: rgba(248, 250, 252, 1);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+/* Clock Section Dark Theme */
+[data-theme="dark"] .clock-format-toggle {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .clock-format-toggle:hover {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+/* Clock Section Cyber Theme */
+[data-theme="cyber"] .clock-format-toggle {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: #00ff88;
+}
+
+[data-theme="cyber"] .clock-format-toggle:hover {
+  background: rgba(20, 20, 20, 0.9);
+  border-color: #00ff88;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
 }

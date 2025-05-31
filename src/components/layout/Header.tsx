@@ -48,7 +48,9 @@ export const Header = () => {
     autoDownload, 
     setAutoDownload, 
     defaultQuality, 
-    setDefaultQuality
+    setDefaultQuality,
+    clockFormat,
+    setClockFormat
   } = useAppStore();
   
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -98,7 +100,7 @@ export const Header = () => {
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
-      hour12: true,
+      hour12: clockFormat === '12h',
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit'
@@ -259,8 +261,20 @@ export const Header = () => {
           {/* Clock & Location */}
           <div className="nav-clock-section">
             <div className="text-right">
-              <div className="text-sm font-mono font-semibold">
-                {formatTime(currentTime)}
+              <div className="flex items-center gap-2">
+                <div className="text-sm font-mono font-semibold">
+                  {formatTime(currentTime)}
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setClockFormat(clockFormat === '12h' ? '24h' : '12h')}
+                  className="clock-format-toggle"
+                  title={`Switch to ${clockFormat === '12h' ? '24-hour' : '12-hour'} format`}
+                >
+                  <Clock className="w-3 h-3" />
+                  <span className="text-xs">{clockFormat}</span>
+                </motion.button>
               </div>
               <div className="text-xs text-muted-foreground">
                 {formatDate(currentTime)} • 🌏 {userLocation}
