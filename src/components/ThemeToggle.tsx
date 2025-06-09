@@ -47,12 +47,14 @@ export const ThemeToggle = () => {
       body.style.transition = 'all 0.5s ease-in-out';
       
       if (imageExists) {
+        console.log(`✅ Successfully loading background image: ${currentTheme.image}`);
         body.style.backgroundImage = `url('${currentTheme.image}')`;
         body.style.backgroundSize = 'cover';
         body.style.backgroundPosition = 'center';
         body.style.backgroundRepeat = 'no-repeat';
         body.style.backgroundAttachment = 'fixed';
       } else {
+        console.log(`❌ Failed to load background image: ${currentTheme.image}, using fallback color`);
         // Fallback to solid color
         body.style.backgroundImage = 'none';
         body.style.backgroundColor = currentTheme.fallbackColor;
@@ -85,6 +87,10 @@ export const ThemeToggle = () => {
       // Also update the HTML data-theme attribute for CSS
       document.documentElement.setAttribute('data-theme', selectedTheme);
       
+      // Ensure body has proper styling for themes
+      body.classList.remove('theme-light', 'theme-dark', 'theme-cyberpunk');
+      body.classList.add(`theme-${selectedTheme}`);
+      
     } catch (error) {
       console.warn(`Failed to load theme image for ${selectedTheme}:`, error);
       setImageError(prev => ({ ...prev, [selectedTheme]: true }));
@@ -108,6 +114,7 @@ export const ThemeToggle = () => {
 
   const handleThemeChange = (newTheme: 'light' | 'dark') => {
     console.log(`🎨 Changing theme from ${theme} to ${newTheme}`);
+    console.log(`🖼️ Loading background image: ${themes.find(t => t.key === newTheme)?.image}`);
     setTheme(newTheme);
   };
 

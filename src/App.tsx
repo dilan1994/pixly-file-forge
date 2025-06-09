@@ -20,6 +20,7 @@ import { GDPRCompliancePage } from '@/pages/GDPRCompliancePage';
 import { ChangelogPage } from '@/pages/ChangelogPage';
 import { APIAccessPage } from '@/pages/APIAccessPage';
 import QRGenerator from '@/pages/tools/QRGenerator';
+import PDFConverter from '@/pages/tools/PDFConverter';
 import NotFound from '@/pages/NotFound';
 import { MobileAppPage } from '@/pages/MobileAppPage';
 import { useEffect } from 'react';
@@ -89,6 +90,7 @@ function App() {
                   <Route path="/api" element={<APIAccessPage />} />
                   <Route path="/mobile" element={<MobileAppPage />} />
                   <Route path="/tools/qr-generator" element={<QRGenerator />} />
+                  <Route path="/tools/pdf-converter" element={<PDFConverter />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
