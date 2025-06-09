@@ -21,16 +21,8 @@ import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import JSZip from 'jszip';
 
-// Configure PDF.js worker with fallback options
-if (typeof window !== 'undefined') {
-  try {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
-  } catch (error) {
-    console.warn('Failed to set PDF.js worker, using fallback');
-    // Fallback to local worker if CDN fails
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
-  }
-}
+// Configure PDF.js worker with proper initialization
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
 interface UploadedFile {
   id: string;
@@ -72,7 +64,9 @@ const PDFConverter: React.FC = () => {
 
   // Initialize PDF.js when component mounts
   React.useEffect(() => {
+    console.log('Initializing PDF.js...');
     console.log('Worker source:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+    console.log('PDF.js getDocument available:', !!pdfjsLib.getDocument);
     
     // Test if PDF.js is working by checking its API
     if (!pdfjsLib.getDocument) {
@@ -80,6 +74,7 @@ const PDFConverter: React.FC = () => {
       toast.error('PDF processing is not available. Please refresh the page.');
     } else {
       console.log('PDF.js initialized successfully');
+      toast.success('PDF converter ready!');
     }
   }, []);
 
@@ -169,20 +164,31 @@ const PDFConverter: React.FC = () => {
   const convertPdfToImages = async (file: UploadedFile): Promise<Blob[]> => {
     try {
       console.log('Starting PDF to Images conversion for:', file.name);
+      
+      // Validate PDF.js is available
+      if (!pdfjsLib.getDocument) {
+        throw new Error('PDF.js is not properly initialized');
+      }
+      
       const arrayBuffer = await file.file.arrayBuffer();
       console.log('ArrayBuffer size:', arrayBuffer.byteLength);
       
-      // Load PDF document
+      if (arrayBuffer.byteLength === 0) {
+        throw new Error('File appears to be empty');
+      }
+      
+      // Load PDF document with error handling
       const loadingTask = pdfjsLib.getDocument({ 
-        data: arrayBuffer,
-        useSystemFonts: true,
-        disableFontFace: false,
-        enableXfa: false
+        data: arrayBuffer
       } as any);
       
       console.log('Loading task created, waiting for promise...');
       const pdf = await loadingTask.promise;
       console.log('PDF loaded successfully, pages:', pdf.numPages);
+      
+      if (pdf.numPages === 0) {
+        throw new Error('PDF has no pages');
+      }
       
       const images: Blob[] = [];
 
@@ -262,23 +268,30 @@ const PDFConverter: React.FC = () => {
         const img = document.createElement('img');
         
         // Load image
-        await new Promise((resolve, reject) => {
-          img.onload = resolve;
+        const imageSrc = await new Promise<string>((resolve, reject) => {
+          if (file.preview) {
+            resolve(file.preview);
+          } else {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              resolve(e.target?.result as string);
+            };
+            reader.onerror = (error) => {
+              console.error('Failed to read file:', error);
+              reject(new Error(`Failed to read file: ${file.name}`));
+            };
+            reader.readAsDataURL(file.file);
+          }
+        });
+
+        // Set image source and wait for load
+        await new Promise<void>((resolve, reject) => {
+          img.onload = () => resolve();
           img.onerror = (error) => {
             console.error('Failed to load image:', error);
             reject(new Error(`Failed to load image: ${file.name}`));
           };
-          
-          if (file.preview) {
-            img.src = file.preview;
-          } else {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              img.src = e.target?.result as string;
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file.file);
-          }
+          img.src = imageSrc;
         });
 
         // Add new page (except for the first image)
@@ -434,8 +447,15 @@ const PDFConverter: React.FC = () => {
 
   // Download file
   const downloadFile = (file: UploadedFile) => {
-    if (!file.result) return;
+    console.log('Download requested for file:', file.name);
+    
+    if (!file.result) {
+      console.error('No result blob available for download');
+      toast.error('No file available for download');
+      return;
+    }
 
+    console.log('Creating download URL for blob type:', file.result.type);
     const url = URL.createObjectURL(file.result);
     const a = document.createElement('a');
     a.href = url;
@@ -448,10 +468,14 @@ const PDFConverter: React.FC = () => {
       a.download = 'converted_images.pdf';
     }
     
+    console.log('Download filename:', a.download);
+    
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    
+    toast.success('Download started!');
   };
 
   // Format file size
