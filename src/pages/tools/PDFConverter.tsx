@@ -21,8 +21,16 @@ import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import JSZip from 'jszip';
 
-// Configure PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+// Configure PDF.js worker with fallback options
+if (typeof window !== 'undefined') {
+  try {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+  } catch (error) {
+    console.warn('Failed to set PDF.js worker, using fallback');
+    // Fallback to local worker if CDN fails
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+  }
+}
 
 interface UploadedFile {
   id: string;
@@ -61,6 +69,19 @@ const PDFConverter: React.FC = () => {
     compression: 'medium'
   });
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Initialize PDF.js when component mounts
+  React.useEffect(() => {
+    console.log('Worker source:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+    
+    // Test if PDF.js is working by checking its API
+    if (!pdfjsLib.getDocument) {
+      console.error('PDF.js getDocument not available');
+      toast.error('PDF processing is not available. Please refresh the page.');
+    } else {
+      console.log('PDF.js initialized successfully');
+    }
+  }, []);
 
   // File validation
   const validateFile = (file: File): string | null => {
@@ -146,104 +167,192 @@ const PDFConverter: React.FC = () => {
 
   // Convert PDF to Images
   const convertPdfToImages = async (file: UploadedFile): Promise<Blob[]> => {
-    const arrayBuffer = await file.file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    const images: Blob[] = [];
-
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const viewport = page.getViewport({ scale: settings.dpi / 72 });
+    try {
+      console.log('Starting PDF to Images conversion for:', file.name);
+      const arrayBuffer = await file.file.arrayBuffer();
+      console.log('ArrayBuffer size:', arrayBuffer.byteLength);
       
-      const canvas = canvasRef.current || document.createElement('canvas');
-      const context = canvas.getContext('2d')!;
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+      // Load PDF document
+      const loadingTask = pdfjsLib.getDocument({ 
+        data: arrayBuffer,
+        useSystemFonts: true,
+        disableFontFace: false,
+        enableXfa: false
+      } as any);
+      
+      console.log('Loading task created, waiting for promise...');
+      const pdf = await loadingTask.promise;
+      console.log('PDF loaded successfully, pages:', pdf.numPages);
+      
+      const images: Blob[] = [];
 
-      await page.render({
-        canvasContext: context,
-        viewport: viewport
-      }).promise;
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        console.log(`Processing page ${pageNum}/${pdf.numPages}`);
+        
+        const page = await pdf.getPage(pageNum);
+        const scale = settings.dpi / 72; // Convert DPI to scale
+        const viewport = page.getViewport({ scale });
+        
+        // Create canvas element
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        if (!context) {
+          throw new Error('Failed to get 2D context');
+        }
+        
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
-      // Convert canvas to blob
-      const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => {
-          resolve(blob!);
-        }, `image/${settings.outputFormat}`, settings.quality / 100);
-      });
+        // Render page to canvas
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
 
-      images.push(blob);
+        await page.render(renderContext).promise;
+        console.log(`Page ${pageNum} rendered to canvas`);
 
-      // Update progress
-      const progress = (pageNum / pdf.numPages) * 100;
-      setFiles(prev => prev.map(f => 
-        f.id === file.id ? { ...f, progress } : f
-      ));
+        // Convert canvas to blob
+        const blob = await new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Failed to convert canvas to blob'));
+            }
+          }, `image/${settings.outputFormat}`, settings.quality / 100);
+        });
+
+        images.push(blob);
+        console.log(`Page ${pageNum} converted to ${settings.outputFormat}`);
+
+        // Update progress
+        const progress = (pageNum / pdf.numPages) * 100;
+        setFiles(prev => prev.map(f => 
+          f.id === file.id ? { ...f, progress } : f
+        ));
+      }
+
+      console.log('PDF conversion completed, total images:', images.length);
+      return images;
+    } catch (error) {
+      console.error('Error in convertPdfToImages:', error);
+      throw error;
     }
-
-    return images;
   };
 
   // Convert Images to PDF
   const convertImagesToPdf = async (files: UploadedFile[]): Promise<Blob> => {
-    const pdf = new jsPDF({
-      orientation: settings.orientation,
-      unit: 'mm',
-      format: settings.pageSize.toLowerCase() as any
-    });
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const img = document.createElement('img');
+    try {
+      console.log('Starting Images to PDF conversion for', files.length, 'files');
       
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = file.preview || URL.createObjectURL(file.file);
+      const pdf = new jsPDF({
+        orientation: settings.orientation,
+        unit: 'mm',
+        format: settings.pageSize.toLowerCase() as any
       });
 
-      if (i > 0) {
-        pdf.addPage();
+      let isFirstPage = true;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        console.log(`Processing image ${i + 1}/${files.length}:`, file.name);
+        
+        // Create image element
+        const img = document.createElement('img');
+        
+        // Load image
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = (error) => {
+            console.error('Failed to load image:', error);
+            reject(new Error(`Failed to load image: ${file.name}`));
+          };
+          
+          if (file.preview) {
+            img.src = file.preview;
+          } else {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              img.src = e.target?.result as string;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file.file);
+          }
+        });
+
+        // Add new page (except for the first image)
+        if (!isFirstPage) {
+          pdf.addPage();
+        }
+        isFirstPage = false;
+
+        // Calculate dimensions to fit page while maintaining aspect ratio
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgRatio = img.width / img.height;
+        const pageRatio = pageWidth / pageHeight;
+
+        let width, height, x, y;
+        
+        if (imgRatio > pageRatio) {
+          // Image is wider than page ratio
+          width = pageWidth;
+          height = pageWidth / imgRatio;
+          x = 0;
+          y = (pageHeight - height) / 2;
+        } else {
+          // Image is taller than page ratio
+          height = pageHeight;
+          width = pageHeight * imgRatio;
+          x = (pageWidth - width) / 2;
+          y = 0;
+        }
+
+        // Add image to PDF
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx?.drawImage(img, 0, 0);
+        
+        const imageData = canvas.toDataURL(`image/${settings.outputFormat}`, settings.quality / 100);
+        pdf.addImage(imageData, settings.outputFormat.toUpperCase(), x, y, width, height);
+        
+        console.log(`Image ${i + 1} added to PDF`);
+
+        // Update progress
+        const progress = ((i + 1) / files.length) * 100;
+        setFiles(prev => prev.map(f => 
+          files.includes(f) ? { ...f, progress } : f
+        ));
       }
 
-      // Calculate dimensions to fit page
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgRatio = img.width / img.height;
-      const pageRatio = pageWidth / pageHeight;
-
-      let width, height;
-      if (imgRatio > pageRatio) {
-        width = pageWidth;
-        height = pageWidth / imgRatio;
-      } else {
-        height = pageHeight;
-        width = pageHeight * imgRatio;
-      }
-
-      const x = (pageWidth - width) / 2;
-      const y = (pageHeight - height) / 2;
-
-      pdf.addImage(img, settings.outputFormat.toUpperCase(), x, y, width, height);
-
-      // Update progress
-      const progress = ((i + 1) / files.length) * 100;
-      setFiles(prev => prev.map(f => 
-        files.includes(f) ? { ...f, progress } : f
-      ));
+      const pdfBlob = pdf.output('blob');
+      console.log('PDF creation completed');
+      return pdfBlob;
+    } catch (error) {
+      console.error('Error in convertImagesToPdf:', error);
+      throw error;
     }
-
-    const pdfBlob = pdf.output('blob');
-    return pdfBlob;
   };
 
   // Start conversion process
   const startConversion = async () => {
+    console.log('Start conversion button clicked!');
+    
     if (files.length === 0) {
       toast.error('Please upload files first');
       return;
     }
 
+    console.log('Starting conversion process...');
+    console.log('Mode:', mode);
+    console.log('Files to convert:', files.length);
+    console.log('Settings:', settings);
+
     setIsProcessing(true);
+    toast.loading('Starting conversion...');
 
     try {
       if (mode === 'pdf-to-images') {
@@ -312,9 +421,11 @@ const PDFConverter: React.FC = () => {
         }
       }
 
+      toast.dismiss(); // Dismiss loading toast
       toast.success('Conversion completed!');
     } catch (error) {
       console.error('Conversion error:', error);
+      toast.dismiss(); // Dismiss loading toast
       toast.error('Conversion failed');
     } finally {
       setIsProcessing(false);

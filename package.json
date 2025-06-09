@@ -40,7 +40,7 @@
     "mime-types": "^2.1.35",
     "pdf-lib": "^1.17.1",
     "pdf2pic": "^3.0.1",
-    "pdfjs-dist": "^5.3.31",
+    "pdfjs-dist": "^3.11.174",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
