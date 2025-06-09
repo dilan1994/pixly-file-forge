@@ -33,3 +33,6 @@ dist-ssr
 # *.jpg
 # *.png
 # *.gif
+
+# Original backup files
+*_original_backup.*
