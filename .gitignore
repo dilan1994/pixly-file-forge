@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Backup files
+*.backup
+*.bloated-backup
+*.bak
+*~
+
+# Large media files (optional - you may want to commit these)
+# *.jpg
+# *.png
+# *.gif

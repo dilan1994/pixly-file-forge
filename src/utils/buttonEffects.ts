@@ -338,12 +338,6 @@ export class ButtonEffectsManager {
           secondary: '#a855f7',
           accent: '#34d399'
         };
-      case 'cyber':
-        return {
-          primary: '#00ff88',
-          secondary: '#00ccff',
-          accent: '#ff0080'
-        };
       default: // light
         return {
           primary: '#3b82f6',

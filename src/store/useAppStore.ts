@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type Theme = 'light' | 'dark' | 'cyber';
+export type Theme = 'light' | 'dark';
 
 interface AppState {
   theme: Theme;
@@ -21,7 +21,7 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
-      theme: 'dark',
+      theme: 'light',
       clockFormat: '12h',
       autoDownload: false,
       defaultQuality: 0.9,

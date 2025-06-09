@@ -27,55 +27,31 @@
     "react-i18next": "^13.2.2",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.1.0",
-    
-    "@comment-1": "Image Processing Libraries",
     "fabric": "^5.3.0",
     "konva": "^9.2.0",
     "react-konva": "^18.2.10",
-    
-    "@comment-2": "PDF Processing Libraries",
     "pdf-lib": "^1.17.1",
     "jspdf": "^2.5.1",
     "pdf2pic": "^3.0.1",
-    
-    "@comment-3": "Archive Processing Libraries",
     "jszip": "^3.10.1",
     "file-saver": "^2.0.5",
-    
-    "@comment-4": "OCR & Text Processing Libraries",
     "tesseract.js": "^5.0.2",
-    
-    "@comment-5": "Barcode & QR Generation Libraries",
     "qrcode": "^1.5.3",
     "jsbarcode": "^3.11.5",
-    
-    "@comment-6": "GIF Processing Libraries",
     "gif.js": "^0.2.0",
     "gifuct-js": "^2.1.2",
-    
-    "@comment-7": "Color & Design Tools",
     "color": "^4.2.3",
     "colorthief": "^2.4.0",
     "chroma-js": "^2.4.2",
-    
-    "@comment-8": "Crypto & Security Libraries",
     "crypto-js": "^4.1.1",
     "bcryptjs": "^2.4.3",
-    
-    "@comment-9": "Utility Libraries",
     "date-fns": "^2.30.0",
     "lodash": "^4.17.21",
     "uuid": "^9.0.0",
     "mime-types": "^2.1.35",
-    
-    "@comment-10": "Chart & Visualization Libraries",
     "chart.js": "^4.4.0",
     "react-chartjs-2": "^5.2.0",
-    
-    "@comment-11": "Audio Processing Libraries",
     "wavesurfer.js": "^7.3.0",
-    
-    "@comment-12": "Video Processing Libraries",
     "ffmpeg.js": "^4.2.9003"
   },
   "devDependencies": {

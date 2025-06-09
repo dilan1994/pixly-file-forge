@@ -10,7 +10,6 @@ import {
   Sun, 
   Monitor,
   Clock,
-  Zap,
   Download,
   Settings,
   Globe,
@@ -20,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import ToolsDropdown from '@/components/ToolsDropdown';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { buttonEffects } from '@/utils/buttonEffects';
 
 interface Language {
@@ -147,7 +147,7 @@ export const Header = () => {
               transition={{ duration: 0.5 }}
               className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
             >
-              <Zap className="w-5 h-5 text-primary-foreground" />
+              <Settings className="w-5 h-5 text-primary-foreground" />
             </motion.div>
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Pixly Forge
@@ -305,29 +305,7 @@ export const Header = () => {
 
           {/* Theme Controls */}
           <div className="theme-controls">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={(e) => {
-                setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'cyber' : 'light');
-                // Manually trigger gradient flow effect
-                const target = e.currentTarget as HTMLElement;
-                buttonEffects.manuallyTriggerGradientFlow(target);
-              }}
-              className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
-              title="Toggle theme"
-            >
-              {theme === 'light' ? (
-                <Sun className="w-4 h-4" />
-              ) : theme === 'dark' ? (
-                <Moon className="w-4 h-4" />
-              ) : (
-                <Zap className="w-4 h-4" />
-              )}
-              <span className="hidden lg:inline">
-                {t(`theme.${theme}`)}
-              </span>
-            </motion.button>
+            <ThemeToggle />
           </div>
         </div>
       </nav>

@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Settings, Download, Palette, Globe } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
+  Settings,
+  Download,
+  Globe,
   Github, 
   Twitter, 
   Linkedin, 
@@ -11,7 +13,7 @@ import {
   FileText,
   HelpCircle,
   BookOpen,
-  Zap,
+  Image,
   Shield,
   Star
 } from 'lucide-react';
@@ -37,7 +39,7 @@ export const Footer = () => {
   } = useAppStore();
 
   const productLinks = [
-    { label: 'Image Converter', href: '/', icon: Zap },
+    { label: 'Image Converter', href: '/', icon: Image },
     { label: 'Batch Processing', href: '/#batch', icon: Download },
     { label: 'API Access', href: '/api', icon: Settings },
     { label: 'Mobile App', href: '/mobile', icon: Globe }
@@ -92,8 +94,7 @@ export const Footer = () => {
 
   const themes = [
     { value: 'light', label: t('theme.light'), icon: '☀️' },
-    { value: 'dark', label: t('theme.dark'), icon: '🌙' },
-    { value: 'cyber', label: t('theme.cyber'), icon: '⚡' }
+    { value: 'dark', label: t('theme.dark'), icon: '🌙' }
   ];
 
   const handleLanguageChange = (langCode: string) => {
@@ -168,7 +169,7 @@ export const Footer = () => {
                 transition={{ duration: 0.5 }}
                 className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
               >
-                <Zap className="w-5 h-5 text-primary-foreground" />
+                <Image className="w-5 h-5 text-primary-foreground" />
               </motion.div>
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Pixly Forge

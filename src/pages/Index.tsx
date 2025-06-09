@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { Settings, Trash2, Play, FileImage, Upload, Download } from 'lucide-react';
-import { ConversionTabs } from '@/components/ConversionTabs';
 import { ConversionButtons } from '@/components/ConversionButtons';
 import { FileUpload } from '@/components/FileUpload';
 import { FileQueue } from '@/components/FileQueue';
 import { FeatureCards } from '@/components/FeatureCards';
 import { ConverterButton } from '@/components/ui/ConverterButton';
+
 import { useImageConverter } from '@/hooks/useImageConverter';
 import { ConversionTab, ConversionSettings } from '@/types';
 import { useAppStore } from '@/store/useAppStore';
@@ -40,12 +40,6 @@ const Index = () => {
     removeFile,
     clearAll
   } = useImageConverter();
-
-  const handleTabChange = (tab: ConversionTab) => {
-    setActiveTab(tab.id);
-    setCurrentConversion(tab);
-    setSettings(prev => ({ ...prev, format: tab.toFormat }));
-  };
 
   const handleTabChangeById = (tabId: string) => {
     // Define the conversion options to match the ones in ConversionButtons
@@ -122,20 +116,6 @@ const Index = () => {
           />
         </motion.div>
 
-        {/* Conversion Tabs - Large Square Cards (Hidden) */}
-        {/* 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <ConversionTabs 
-            activeTab={activeTab} 
-            onTabChange={handleTabChange} 
-          />
-        </motion.div>
-        */}
-
         {/* Upload Area */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -189,20 +169,15 @@ const Index = () => {
                   <ConverterButton
                     onClick={handleConvert}
                     disabled={pendingFilesCount === 0 || isConverting}
-                    variant="default"
-                    className="inline-flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    {isConverting ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>{t('controls.converting')}</span>
-                      </>
+                    gradient="from-blue-500 to-purple-600"
+                    icon={isConverting ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (
-                      <>
-                        <Play className="w-4 h-4" />
-                        <span>{t('controls.convert_files')}</span>
-                      </>
+                      <Play className="w-4 h-4" />
                     )}
+                    className="space-x-2"
+                  >
+                    {isConverting ? t('controls.converting') : t('controls.convert_files')}
                   </ConverterButton>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, FileImage, Zap, FileText, Image, FileType, Camera, Palette, Star, RotateCcw, Sparkles, Globe } from 'lucide-react';
 import { ConversionTab } from '@/types';
+import { ConverterButton } from '@/components/ui/ConverterButton';
 
 const CONVERSION_OPTIONS: ConversionTab[] = [
   { 
@@ -168,60 +169,29 @@ export const ConversionButtons = ({ activeTab, onTabChange }: ConversionButtonsP
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="conversion-tab-menu-enhanced"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 justify-items-center p-6 mb-6 max-w-6xl mx-auto"
         >
           {CONVERSION_OPTIONS.map((option, index) => {
             const IconComponent = getIconComponent(option.icon || 'ArrowRight');
             const isActive = activeTab === option.id;
             
             return (
-              <motion.button
+              <motion.div
                 key={option.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.05 }}
-                whileHover={{ 
-                  scale: 1.05,
-                  y: -2
-                }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onTabChange(option.id)}
-                className={`
-                  conversion-tab-enhanced conversion-tab-inline
-                  ${isActive ? 'active' : ''}
-                  relative flex items-center justify-center gap-2
-                  transition-all duration-300 ease-out
-                  bg-gradient-to-r ${option.gradient}
-                  text-white shadow-lg hover:shadow-xl
-                  border border-white/20 backdrop-blur-sm
-                  ${isActive ? 'ring-2 ring-white/50 shadow-2xl' : ''}
-                `}
-                style={{
-                  background: isActive 
-                    ? `linear-gradient(135deg, var(--gradient-from), var(--gradient-to))`
-                    : undefined
-                }}
               >
-                {/* Icon */}
-                <IconComponent className="w-4 h-4 flex-shrink-0" />
-                
-                {/* Text Content */}
-                <span className="font-semibold whitespace-nowrap tab-inline-text">
+                <ConverterButton
+                  onClick={() => onTabChange(option.id)}
+                  gradient={option.gradient}
+                  isActive={isActive}
+                  icon={<IconComponent className="w-4 h-4" />}
+                  className="w-full"
+                >
                   {option.label}
-                </span>
-
-                {/* Active Indicator */}
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-white/10 rounded-xl border-2 border-white/30"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-
-                {/* Hover Glow Effect */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/0 via-white/10 to-white/0 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-              </motion.button>
+                </ConverterButton>
+              </motion.div>
             );
           })}
         </motion.div>
@@ -260,8 +230,6 @@ export const ConversionButtons = ({ activeTab, onTabChange }: ConversionButtonsP
           </div>
         )}
       </motion.div>
-
-      {/* Enhanced Mobile Styles */}
     </motion.div>
   );
 }; 
