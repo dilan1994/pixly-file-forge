@@ -96,22 +96,22 @@ export const ThemeToggle = () => {
   return (
     <div className="relative">
       {/* Theme Toggle Container */}
-      <div className="flex items-center bg-surface/90 backdrop-blur-md rounded-lg p-1 border border-primary/20 shadow-lg">
+      <div className="flex items-center bg-surface/90 backdrop-blur-md rounded-full p-0.5 border border-primary/20 shadow-lg">
         {themes.map(({ key, icon: Icon, label }) => (
           <button
             key={key}
             onClick={() => handleThemeChange(key)}
             className={`
-              flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-300
+              flex items-center space-x-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-300
               ${theme === key 
-                ? 'bg-primary text-white shadow-lg scale-105 ring-2 ring-primary/30' 
+                ? 'bg-primary text-white shadow-md scale-105 ring-1 ring-primary/30' 
                 : 'text-text/70 hover:text-text hover:bg-primary/10 hover:scale-102'
               }
             `}
             title={`Switch to ${label} theme`}
           >
-            <Icon className="w-4 h-4" />
-            <span className="hidden sm:block">{label}</span>
+            <Icon className="w-3.5 h-3.5" />
+            <span className="hidden sm:block text-xs">{label}</span>
             
             {/* Error indicator for failed image loads */}
             {imageError[key] && (
@@ -124,7 +124,7 @@ export const ThemeToggle = () => {
       </div>
 
       {/* Current Theme Indicator */}
-      <div className="absolute -top-2 -right-2 w-3 h-3 rounded-full bg-primary shadow-md animate-pulse" />
+      <div className="absolute -top-1.5 -right-1.5 w-2 h-2 rounded-full bg-primary shadow-sm animate-pulse" />
     </div>
   );
 };
